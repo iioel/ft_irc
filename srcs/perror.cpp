@@ -1,30 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   perror.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/14 16:24:46 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/14 17:29:34 by yoel             ###   ########.fr       */
+/*   Created: 2023/07/14 16:22:32 by yoel              #+#    #+#             */
+/*   Updated: 2023/07/14 16:23:21 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include <cstdlib>
-#include "IRCServer.hpp"
+#include <errno.h>
+#include "perror.hpp"
 
-int main(int argc, char **argv)
+int perror(std::string str)
 {
-	IRCServer ircserv;
-
-	if (argc == 4)
-	{
-		if (ircserv.init(atoi(argv[1]), argv[2], argv[3]))
-			return (1);
-		ircserv.run();
-	}
-	else
-		std::cout << "Usage: ./ircserv [port] [password] [motd]" << std::endl;
-	return (0);
+	std::cout << str << ": " << strerror(errno) << std::endl;
+	return (1);
 }
