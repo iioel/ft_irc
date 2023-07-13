@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 14:35:17 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/13 20:40:09 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/14 00:57:18 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <sstream>
+#include <fcntl.h>
+#include <sys/select.h>
+#include <cerrno>
+#include <errno.h>
 
 #define PORT 6667
 #define MAX_FD 30
@@ -124,6 +128,7 @@ int main(int argc, char const *argv[])
 	(void)argc;
 	(void)argv;
 
+	fd_set originfds;
 	fd_set readfds;
 	fd_set writefds;
 	int max_fd = MAX_FD;
@@ -140,23 +145,18 @@ int main(int argc, char const *argv[])
 		clients_fds[i] = -1;
 	clients_fds[0] = server_fd;
 	max_fd = server_fd;
+	fcntl(server_fd, F_SETFL, O_NONBLOCK);
+	FD_ZERO(&originfds);
+	FD_SET(server_fd, &originfds);
 
 	while(1)
 	{
-		FD_ZERO(&readfds);
-		FD_ZERO(&writefds);
-		FD_SET(server_fd, &readfds);
-		for (int i = 0; i < 30; i++)
-		{
-			if (clients_fds[i] != -1)
-			{
-				FD_SET(clients_fds[i], &readfds);
-				FD_SET(clients_fds[i], &writefds);
-			}
-		}
+		readfds = originfds;
+		writefds = originfds;
 
 		std::cout << "Waiting for activity... ";
-		int activity = select(max_fd + 1, &readfds, &writefds, NULL, NULL);
+		int activity = select(max_fd + 1, &readfds, NULL, NULL, NULL);
+		std::cout << "activity: " << activity << " ";
 
 		if (activity < 0)
 		{
@@ -184,37 +184,47 @@ int main(int argc, char const *argv[])
 				std::cout << "fd: " << new_socket_fd << " OK" << std::endl;
 
 				std::cout << "Adding to list... ";
+				std::cout << "Max fd: " << max_fd << " ";
 				for (int i = 0; i < 30; i++)
 				{
 					if (clients_fds[i] == -1)
 					{
+						fcntl(new_socket_fd, F_SETFL, O_NONBLOCK);
 						clients_fds[i] = new_socket_fd;
+						if (new_socket_fd > max_fd)
+							max_fd = new_socket_fd + 2;
 						std::cout << "id: " << i << " OK" << std::endl;
-						break ;
+						i = 30;
 					}
 				}
+				continue ;
 			}
 
 			for (int i=1; i < MAX_FD; i++)
 			{
-				if (fd_is_readable(clients_fds[i], &readfds))
+				if (FD_ISSET(i, &readfds))
 				{
+					std::cout << "Checking fd: " << i << "... ";
 					std::cout << "Reading request... ";
 					std::string request;
 					int read_size = 0;
 					do
 					{
 						bzero(buffer, BUFFER_SIZE);
-						read_size = recv(clients_fds[i], buffer, BUFFER_SIZE-1, 0);
+						std::cout << "Reading... ";
+						read_size = recv(i, buffer, BUFFER_SIZE-1, 0);
+						//read_size = read(new_socket_fd, buffer, BUFFER_SIZE-1);
 						if (read_size < 0)
 						{
 							std::cout << "Error" << std::endl;
+							std::cout << errno << std::endl;
+							std::cout << strerror(errno);
 							return 1;
 						}
 						if (read_size == 0)
 						{
 							std::cout << "Client disconnected" << std::endl;
-							close(clients_fds[i]);
+							close(i);
 							clients_fds[i] = -1;
 							continue ;
 						}
@@ -225,27 +235,19 @@ int main(int argc, char const *argv[])
 
 					std::string response = handle_request(request, clients_fds, i);
 					std::cout << "Sending response... ";
-					if (fd_is_writable(clients_fds[i], &writefds))
+					if (send(i, response.c_str(), response.length(), 0) < 0)
 					{
-						if (send(clients_fds[i], response.c_str(), response.length(), 0) < 0)
-						{
-							std::cout << "Error" << std::endl;
-							return 1;
-						}
-						std::cout << "OK" << std::endl;
-						continue ;
-					}
-					else
-					{
-						std::cout << "FD unavailable to write" << std::endl;
+						std::cout << "Error" << std::endl;
 						return 1;
 					}
+					std::cout << "OK" << std::endl;
+					continue ;
 				}
 			}
 		}
 	}
 
-//	bool nick = false;
+/*	bool nick = false;
 //	bool user = false;
 //	bool welcome = false;
 //	bool cap = false;
@@ -338,7 +340,7 @@ int main(int argc, char const *argv[])
 //		std::cout << "Error" << std::endl;
 //		return 1;
 //	}
-//	std::cout << "OK" << std::endl;
+*/	std::cout << "OK" << std::endl;
 
 	std::cout << "Closing socket... ";
 	if (close(server_fd) < 0)
