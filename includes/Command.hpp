@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/14 16:24:46 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/14 17:29:34 by yoel             ###   ########.fr       */
+/*   Created: 2023/07/14 11:24:18 by yoel              #+#    #+#             */
+/*   Updated: 2023/07/14 13:11:20 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <cstdlib>
-#include "IRCServer.hpp"
+#ifndef COMMAND_HPP
+# define COMMAND_HPP
 
-int main(int argc, char **argv)
+# include <string>
+# include <vector>
+
+class Command
 {
-	IRCServer ircserv;
+	public:
+		Command(std::string command);
+		~Command();
+		Command(const Command &src);
+		Command &operator=(const Command &src);
+	private:
+		Command();
+		int _parse();
 
-	if (argc == 4)
-	{
-		if (ircserv.init(atoi(argv[1]), argv[2], argv[3]))
-			return (1);
-		ircserv.run();
-	}
-	else
-		std::cout << "Usage: ./ircserv [port] [password] [motd]" << std::endl;
-	return (0);
-}
+		std::string 				_command;
+		std::string 				_prefix;
+		std::vector<std::string> 	_params;
+};
+
+#endif
