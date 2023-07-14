@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 14:35:17 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/14 00:57:18 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/14 02:35:38 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ int create_socket()
 		return 1;
 	}
 	std::cout << "OK" << std::endl;
+
+	if (fcntl(socket_fd, F_SETFL, O_NONBLOCK) < 0)
+	{
+		std::cout << strerror(errno) << std::endl;
+		return 1;
+	}
 
 	std::cout << "Binding socket... ";
 	struct sockaddr_in addr;
@@ -68,15 +74,15 @@ bool fd_is_writable(int fd, fd_set *writefds)
 	return fd > 0 && FD_ISSET(fd, writefds);
 }
 
-std::string handle_request(std::string request, int clients_fds[MAX_FD], int index)
+std::string handle_request(std::string request, int fd)
 {
-	std::string response;
+	std::string response = "";
 	std::string line;
 	std::stringstream ss(request);
 
 	while (std::getline(ss, line))
 	{
-		if (line.find("CAP LS 302") != std::string::npos)
+		if (line.find("CAP LS") != std::string::npos)
 		{
 			response += "CAP * LS :\r\n";
 			continue ;
@@ -106,19 +112,23 @@ std::string handle_request(std::string request, int clients_fds[MAX_FD], int ind
 			response += "PRIVMSG " + line.substr(8) + "\r\n";
 			continue ;
 		}
+		if (line.find("MODE") != std::string::npos)
+		{
+			response += "MODE " + line.substr(5) + "\r\n";
+			continue ;
+		}
 		if (line.find("QUIT") != std::string::npos)
 		{
 			response += "QUIT " + line.substr(5) + "\r\n";
 			std::cout << "Closing connection... ";
-			if (close(clients_fds[index]) < 0)
+			if (close(fd) < 0)
 			{
 				std::cout << "Error" << std::endl;
-				return "";
+				return "ERROR";
 			}
-			std::cout << "fd: " << clients_fds[index] << " OK" << std::endl;
-			clients_fds[index] = -1;
 			continue ;
 		}
+		continue ;
 	}
 	return response;
 }
@@ -128,31 +138,19 @@ int main(int argc, char const *argv[])
 	(void)argc;
 	(void)argv;
 
-	fd_set originfds;
-	fd_set readfds;
-	fd_set writefds;
-	int max_fd = MAX_FD;
+	fd_set originfds, readfds;
 	int server_fd = create_socket();
 	if (server_fd == 1)
 		return 1;
-	int clients_fds[MAX_FD];
-	int new_socket_fd;
-	struct sockaddr_in client_addr;
-	socklen_t client_len = sizeof(client_addr);
+	int max_fd = server_fd;
 	char buffer[BUFFER_SIZE];
 
-	for (int i = 0; i < 30; i++)
-		clients_fds[i] = -1;
-	clients_fds[0] = server_fd;
-	max_fd = server_fd;
-	fcntl(server_fd, F_SETFL, O_NONBLOCK);
 	FD_ZERO(&originfds);
 	FD_SET(server_fd, &originfds);
 
 	while(1)
 	{
 		readfds = originfds;
-		writefds = originfds;
 
 		std::cout << "Waiting for activity... ";
 		int activity = select(max_fd + 1, &readfds, NULL, NULL, NULL);
@@ -172,76 +170,81 @@ int main(int argc, char const *argv[])
 		if (activity > 0)
 		{
 			std::cout << "OK" << std::endl;
-			if (FD_ISSET(server_fd, &readfds))
+			for (int i = 0; i < max_fd + 1; i++)
 			{
-				std::cout << "New connection... ";
-				new_socket_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_len);
-				if (new_socket_fd < 0)
+				if (fd_is_readable(i, &readfds))
 				{
-					std::cout << "Error" << std::endl;
-					return 1;
-				}
-				std::cout << "fd: " << new_socket_fd << " OK" << std::endl;
-
-				std::cout << "Adding to list... ";
-				std::cout << "Max fd: " << max_fd << " ";
-				for (int i = 0; i < 30; i++)
-				{
-					if (clients_fds[i] == -1)
+					if (i == server_fd)
 					{
-						fcntl(new_socket_fd, F_SETFL, O_NONBLOCK);
-						clients_fds[i] = new_socket_fd;
-						if (new_socket_fd > max_fd)
-							max_fd = new_socket_fd + 2;
-						std::cout << "id: " << i << " OK" << std::endl;
-						i = 30;
-					}
-				}
-				continue ;
-			}
-
-			for (int i=1; i < MAX_FD; i++)
-			{
-				if (FD_ISSET(i, &readfds))
-				{
-					std::cout << "Checking fd: " << i << "... ";
-					std::cout << "Reading request... ";
-					std::string request;
-					int read_size = 0;
-					do
-					{
-						bzero(buffer, BUFFER_SIZE);
-						std::cout << "Reading... ";
-						read_size = recv(i, buffer, BUFFER_SIZE-1, 0);
-						//read_size = read(new_socket_fd, buffer, BUFFER_SIZE-1);
-						if (read_size < 0)
+						std::cout << "New connection... ";
+						int new_socket_fd = accept(server_fd, NULL, NULL);
+						if (new_socket_fd < 0)
 						{
 							std::cout << "Error" << std::endl;
-							std::cout << errno << std::endl;
-							std::cout << strerror(errno);
 							return 1;
 						}
-						if (read_size == 0)
-						{
-							std::cout << "Client disconnected" << std::endl;
-							close(i);
-							clients_fds[i] = -1;
-							continue ;
-						}
-						request += buffer;
-					} while (read_size == BUFFER_SIZE);
-					std::cout << "OK" << std::endl;
-					std::cout << "Request: " << request << std::endl;
+						std::cout << "fd: " << new_socket_fd << " OK" << std::endl;
 
-					std::string response = handle_request(request, clients_fds, i);
-					std::cout << "Sending response... ";
-					if (send(i, response.c_str(), response.length(), 0) < 0)
-					{
-						std::cout << "Error" << std::endl;
-						return 1;
+						std::cout << "OK" << std::endl;
+						FD_SET(new_socket_fd, &originfds);
+						if (new_socket_fd > max_fd)
+							max_fd = new_socket_fd;
+						std::cout << "New max_fd: " << max_fd << std::endl;
 					}
-					std::cout << "OK" << std::endl;
-					continue ;
+					else
+					{
+						//std::cout << "Reading... ";
+						int valread = read(i, buffer, BUFFER_SIZE);
+						if (valread < 0)
+						{
+							std::cout << "Error" << std::endl;
+							return 1;
+						}
+						else if (valread == 0)
+						{
+							std::cout << "Closing connection... ";
+							if (close(i) < 0)
+							{
+								std::cout << "Error" << std::endl;
+								return 1;
+							}
+							std::cout << "fd: " << i << " OK" << std::endl;
+							FD_CLR(i, &originfds);
+							if (close(i) < 0)
+							{
+								std::cout << "Error" << std::endl;
+								return 1;
+							}
+							if (i == max_fd)
+							{
+								while (max_fd > 0 && !fd_is_readable(max_fd, &originfds))
+									max_fd--;
+								std::cout << "New max_fd: " << max_fd << std::endl;
+							}
+						}
+						else
+						{
+							std::cout << "OK" << std::endl;
+							//std::cout << "Handling request... ";
+							std::string request(buffer);
+							std::cout << "request: " << request << " ";
+							std::string response = handle_request(request, i);
+							if (response == "ERROR")
+							{
+								std::cout << "ttError" << std::endl;
+								return 1;
+							}
+							//std::cout << "OK" << std::endl;
+							//std::cout << "Sending response... ";
+							std::cout << "response: " << response << " ";
+							if (send(i, response.c_str(), response.length(), 0) < 0)
+							{
+								std::cout << "Error" << std::endl;
+								return 1;
+							}
+							//std::cout << "OK" << std::endl;
+						}
+					}
 				}
 			}
 		}
