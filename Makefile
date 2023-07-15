@@ -6,7 +6,7 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/07/14 17:21:41 by yoel             ###   ########.fr        #
+#    Updated: 2023/07/16 14:56:17 by ycornamu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME = ft_irc
 SRCS = main.cpp \
 	   IRCServer.cpp \
 	   Client.cpp \
-	   Channel.cpp
+	   Channel.cpp \
+	   Message.cpp 
 SRCS_DIR = srcs
 
 OBJS = $(SRCS:.cpp=.o)
