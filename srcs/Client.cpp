@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/14 16:58:23 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/16 14:53:47 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,32 @@ void	Client::setRequest(std::string request)
 	this->_request = request;
 }
 
-void	Client::setResponse(std::string response)
+void	Client::addResponse(std::string response)
 {
-	this->_response = response;
+	this->_response += response;
 }
 
+void	Client::clearResponse()
+{
+	this->_response.clear();
+}
 
+bool Client::isRegistered() const
+{
+	return (this->_isRegistered);
+}
+
+void Client::setRegistered(bool isRegistered)
+{
+	this->_isRegistered = isRegistered;
+}
+
+bool Client::isConnected() const
+{
+	return (this->_isConnected);
+}
+
+void Client::setConnected(bool isConnected)
+{
+	this->_isConnected = isConnected;
+}

@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/14 17:28:30 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/16 14:54:35 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void Channel::_sendToAll(std::string message)
 	std::vector<Client *>::iterator it = this->_clients.begin();
 	while (it != this->_clients.end())
 	{
-		(*it)->setResponse(message);
+		(*it)->addResponse(message);
 		it++;
 	}
 }
@@ -121,7 +121,7 @@ void Channel::_sendToAllButOne(std::string message, Client *client)
 	while (it != this->_clients.end())
 	{
 		if (*it != client)
-			(*it)->setResponse(message);
+			(*it)->addResponse(message);
 		it++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/14 17:26:53 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/16 14:55:24 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,24 @@ class IRCServer
 		int			_send(Client & client);
 		void		_addClient(int fd);
 		void		_removeClient(Client & client);
+		void		_processRequest(Client & client);
+
+
+//		_processCap(std::string request, Client & client);
+//		_processPass(std::string request, Client & client);
+//		_processNick(std::string request, Client & client);
+//		_processUser(std::string request, Client & client);
+//		_processPing(std::string request, Client & client);
+//		_processPong(std::string request, Client & client);
+//		_processOper(std::string request, Client & client);
+//		_processQuit(std::string request, Client & client);
+//		_processJoin(std::string request, Client & client);
+//		_processPrivmsg(std::string request, Client & client);
+//		_processMotd(std::string request, Client & client);
+//		_processKick(std::string request, Client & client);
+//		_processInvite(std::string request, Client & client);
+//		_processTopic(std::string request, Client & client);
+//		_processMode(std::string request, Client & client);
 };
 
 #endif

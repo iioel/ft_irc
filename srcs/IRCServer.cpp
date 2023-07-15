@@ -6,11 +6,12 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/14 17:27:57 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/16 14:48:04 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "IRCServer.hpp"
+#include "Message.hpp"
 
 IRCServer::IRCServer()
 {
@@ -161,9 +162,48 @@ int IRCServer::_recv(Client & client)
 			buffer[ret] = '\0';
 			std::cout << "Received: " << buffer << std::endl;
 			client.setRequest(buffer);
+			this->_processRequest(client);
 		}
 	}
 	return 0;
+}
+
+void IRCServer::_processRequest(Client & client)
+{
+	Message request = Message(client.getRequest());
+
+	std::string response;
+//	if (request.getPrefix() == "CAP")
+//		response = this->_processCap(request, client);
+//	else if (request.getPrefix() == "PASS")
+//		response = this->_processPass(request, client);
+//	else if (request.getPrefix() == "NICK")
+//		response = this->_processNick(request, client);
+//	else if (request.getPrefix() == "USER")
+//		response = this->_processUser(request, client);
+//	else if (request.getPrefix() == "PING")
+//		response = this->_processPing(request, client);
+//	else if (request.getPrefix() == "PONG")
+//		response = this->_processPong(request, client);
+//	else if (request.getPrefix() == "OPER")
+//		response = this->_processOper(request, client);
+//	else if (request.getPrefix() == "QUIT")
+//		response = this->_processQuit(request, client);
+//	else if (request.getPrefix() == "JOIN")
+//		response = this->_processJoin(request, client);
+//	else if (request.getPrefix() == "PRIVMSG")
+//		response = this->_processPrivmsg(request, client);
+//	else if (request.getPrefix() == "MOTD")
+//		response = this->_processMotd(request, client);
+//	else if (request.getPrefix() == "KICK")
+//		response = this->_processKick(request, client);
+//	else if (request.getPrefix() == "INVITE")
+//		response = this->_processInvite(request, client);
+//	else if (request.getPrefix() == "TOPIC")
+//		response = this->_processTopic(request, client);
+//	else if (request.getPrefix() == "MODE")
+//		response = this->_processMode(request, client);
+	client.addResponse(response);
 }
 
 void IRCServer::_addClient(int fd)
@@ -194,7 +234,7 @@ int IRCServer::_send(Client & client)
 			else
 			{
 				std::cout << "Sent: " << buffer << std::endl;
-				client.setResponse("");
+				client.clearResponse();
 			}
 		}
 	}
@@ -203,6 +243,6 @@ int IRCServer::_send(Client & client)
 
 int sendToClient(Client & client, std::string const & message)
 {
-	client.setResponse(message);
+	client.addResponse(message);
 	return 0;
 }

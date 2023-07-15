@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:12:41 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/14 17:22:51 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/16 14:52:54 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ class Client
 		Client();
 
 		int			_socket;
+		bool		_isConnected;
+		bool		_isRegistered;
 		std::string	_nickname;
 		std::string	_username;
 		std::string	_realname;
@@ -39,6 +41,8 @@ class Client
 
 		// Getter
 		int			getSocket() const;
+		bool		isConnected() const;
+		bool		isRegistered() const;
 		std::string	getNickname() const;
 		std::string	getUsername() const;
 		std::string	getRealname() const;
@@ -47,11 +51,14 @@ class Client
 
 		// Setter
 		void	setSocket(int fd);
+		void	setConnected(bool isConnected);
+		void	setRegistered(bool isRegistered);
 		void	setNickname(std::string nickname);
 		void	setUsername(std::string username);
 		void	setRealname(std::string realname);
 		void	setRequest(std::string request);
-		void	setResponse(std::string response);
+		void	addResponse(std::string response);
+		void	clearResponse();
 };
 
 #endif
