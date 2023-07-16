@@ -6,7 +6,7 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/07/16 17:17:18 by lduboulo         ###   ########.fr        #
+#    Updated: 2023/07/16 17:39:05 by ycornamu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,8 @@ SRCS 		= main.cpp \
 			  Client.cpp \
 			  Channel.cpp \
 			  Message.cpp \
-			  commands/Cap.cpp
+			  commands/Cap.cpp \
+			  commands/Nick.cpp
 
 SRCS_DIR	= srcs
 

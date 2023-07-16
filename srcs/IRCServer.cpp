@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 17:50:17 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/07/16 18:35:22 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int IRCServer::init(int port, std::string const & password)
 {
 	this->_port = port;
 	this->_password = password;
+	this->_server_name = "server.42.fr";
 	this->_motd = "Welcome to the IRC server";
 	this->_initSocket();
 	this->_initFdSets();
@@ -186,8 +187,8 @@ void IRCServer::_processRequest(Client & client)
 			response = this->_processCap(request, client);
 //		else if (request.getPrefix() == "PASS")
 //			response = this->_processPass(request, client);
-//		else if (request.getPrefix() == "NICK")
-//			response = this->_processNick(request, client);
+		else if (request.getPrefix() == "NICK")
+			response = this->_processNick(request, client);
 //		else if (request.getPrefix() == "USER")
 //			response = this->_processUser(request, client);
 //		else if (request.getPrefix() == "PING")									ycornamu
@@ -265,4 +266,11 @@ int sendToClient(Client & client, std::string const & message)
 {
 	client.addResponse(message);
 	return 0;
+}
+
+std::string	IRCServer::_genReply(std::string reply_code, Client & client, std::string message)
+{
+	std::string reply = ":" + this->_server_name + " " + reply_code + " "
+					  + client.getNickname() + " " + message + "\r\n";
+	return(reply);
 }

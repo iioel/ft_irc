@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 16:47:10 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 17:37:57 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ class IRCServer
 		fd_set 	_allfds;
 		fd_set 	_readfds;
 		fd_set 	_writefds;
+		std::string 				_server_name;
 		std::string 				_motd;
 		std::string 				_password;
 		std::vector<Client> 		_clients;
@@ -65,11 +66,12 @@ class IRCServer
 		void		_addClient(int fd);
 		void		_removeClient(Client & client);
 		void		_processRequest(Client & client);
+		std::string	_genReply(std::string reply_code, Client & client, std::string message);
 
 
 		std::string	_processCap(Message request, Client & client);
 //		std::string	_processPass(Message request, Client & client);
-//		std::string	_processNick(Message request, Client & client);
+		std::string	_processNick(Message request, Client & client);
 //		std::string	_processUser(Message request, Client & client);
 //		std::string	_processPing(Message request, Client & client);
 //		std::string	_processPong(Message request, Client & client);
