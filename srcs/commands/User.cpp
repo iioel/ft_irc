@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:09:38 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/16 18:31:00 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 19:46:36 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 std::string IRCServer::_processUser(Message request, Client & client)
 {
 	std::vector<std::string>	params = request.getParams();
+	std::string					reply = "";
 
 	if (params.size() >= 4)
 	{
@@ -27,10 +28,10 @@ std::string IRCServer::_processUser(Message request, Client & client)
 		client.setUsername(params[0]);
 		client.setRealname(realname);
 		client.setRegistered(true);
-		return (":" + this->_server_name + " " + RPL_WELCOME
-				+ " " + client.getNickname() + " :Welcome to the Internet Relay Network "
+		return (":" + this->_server_name + " " + RPL_WELCOME + " "
+				+ client.getNickname() + " :Welcome to the Internet Relay Network "
 				+ client.getNickname() + "\r\n");
 	}
-	return (":" + this->_server_name + " " + ERR_NEEDMOREPARAMS + " " 
-				+ client.getNickname() + " USER :Not enough parameters" + "\r\n");
+	return (":" + this->_server_name + " " + ERR_NEEDMOREPARAMS + " "
+			+ client.getNickname() + " USER :Not enough parameters" + "\r\n");
 }

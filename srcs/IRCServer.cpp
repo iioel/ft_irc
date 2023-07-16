@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 18:36:09 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/07/16 19:48:27 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,9 +178,9 @@ void IRCServer::_processRequest(Client & client)
 	std::stringstream ss(client.getRequest());
 	std::string line;
 
-	while (getline(ss, line, '\n'))
+	while (getline(ss, line))
 	{
-		Message request = Message(client.getRequest());
+		Message request = Message(line);
 
 		std::string response;
 		if (request.getPrefix() == "CAP")

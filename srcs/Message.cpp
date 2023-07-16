@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 16:55:38 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 17:54:55 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/07/16 19:44:42 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,10 @@ void Message::_parse()
 	std::stringstream ss(this->_message);
 
 	std::getline(ss, this->_prefix, ' ');
+	this->_prefix.erase(std::remove(this->_prefix.begin(), this->_prefix.end(), '\r'), this->_prefix.end());
 	while (std::getline(ss, param, ' '))
+	{
+		param.erase(std::remove(param.begin(), param.end(), '\r'), param.end());
 		this->_params.push_back(param);
+	}
 }

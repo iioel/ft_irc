@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:19:54 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/16 18:29:34 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 19:24:49 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ std::string IRCServer::_processNick(Message request, Client & client)
 			client.setNickname(params[0]);
 		}
 	}
-	return (":" + this->_server_name + " " ERR_NONICKNAMEGIVEN + " "
+	else
+	{
+		return (":" + this->_server_name + " " ERR_NONICKNAMEGIVEN + " " \
 				+ client.getNickname() + " :No nickname given" + "\r\n");
+	}
+	return ("");
 }
 
