@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 16:56:21 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 17:14:07 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ void IRCServer::_processRequest(Client & client)
 //			response = this->_processNick(request, client);
 //		else if (request.getPrefix() == "USER")
 //			response = this->_processUser(request, client);
-//		else if (request.getPrefix() == "PING")
+//		else if (request.getPrefix() == "PING")									ycornamu
 //			response = this->_processPing(request, client);
 //		else if (request.getPrefix() == "PONG")
 //			response = this->_processPong(request, client);
@@ -199,6 +199,7 @@ void IRCServer::_processRequest(Client & client)
 //			response = this->_processOper(request, client);
 //		else if (request.getPrefix() == "QUIT")
 //			response = this->_processQuit(request, client);
+//	------------------------------------------------------------------------------------------------------
 //		else if (request.getPrefix() == "JOIN")
 //			response = this->_processJoin(request, client);
 //		else if (request.getPrefix() == "PRIVMSG")
@@ -207,7 +208,7 @@ void IRCServer::_processRequest(Client & client)
 //			response = this->_processMotd(request, client);
 //		else if (request.getPrefix() == "KICK")
 //			response = this->_processKick(request, client);
-//		else if (request.getPrefix() == "INVITE")
+//		else if (request.getPrefix() == "INVITE")								lduboulo
 //			response = this->_processInvite(request, client);
 //		else if (request.getPrefix() == "TOPIC")
 //			response = this->_processTopic(request, client);
