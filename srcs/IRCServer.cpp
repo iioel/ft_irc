@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 14:48:04 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 15:05:07 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ IRCServer &IRCServer::operator=(const IRCServer &other)
 	return (*this);
 }
 
-int IRCServer::init(int port, std::string const & password, std::string const & motd)
+int IRCServer::init(int port, std::string const & password)
 {
 	this->_port = port;
 	this->_password = password;
-	this->_motd = motd;
+	this->_motd = "Welcome to the IRC server";
 	this->_initSocket();
 	this->_initFdSets();
 	return 0;

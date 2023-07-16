@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 14:55:24 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 15:06:03 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class IRCServer
 		~IRCServer();
 		IRCServer & operator=(IRCServer const & src);
 		
-		int init(int port, std::string const & password, std::string const & motd);
+		int init(int port, std::string const & password);
 		int run();
 
 		int sendToClient(std::string const & message, Client & client);

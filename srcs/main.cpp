@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:24:46 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/14 17:29:34 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/16 15:04:45 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int main(int argc, char **argv)
 
 	if (argc == 4)
 	{
-		if (ircserv.init(atoi(argv[1]), argv[2], argv[3]))
+		if (ircserv.init(atoi(argv[1]), argv[2]))
 			return (1);
 		ircserv.run();
 	}
 	else
-		std::cout << "Usage: ./ircserv [port] [password] [motd]" << std::endl;
+		std::cout << "Usage: ./ircserv [port] [password]" << std::endl;
 	return (0);
 }
