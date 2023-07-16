@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:16:09 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/14 17:09:11 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/16 18:29:55 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ class Channel
 {
 	private:
 		std::string 				_name;
+		std::string					_password;
 		std::vector<Client *> 		_clients;
 		std::vector<std::string> 	_messages;
 
@@ -28,7 +29,7 @@ class Channel
 		void _sendToAllButOne(std::string message, Client *client);
 
 	public:
-		Channel(std::string name);
+		Channel(std::string name, std::string password);
 		~Channel();
 		Channel(Channel const & src);
 		Channel & operator=(Channel const & src);
@@ -37,9 +38,11 @@ class Channel
 		std::string getName() const;
 		std::vector<Client *> getClients() const;
 		std::vector<std::string> getMessages() const;
+		std::string getPassword() const;
 
 		// Setters
 		void setName(std::string name);
+		void setPassword(std::string password);
 		void setClients(std::vector<Client *> clients);
 		void setMessages(std::vector<std::string> messages);
 

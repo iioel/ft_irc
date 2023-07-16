@@ -6,14 +6,14 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 14:53:47 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 17:58:13 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string>
 #include <sys/select.h>
 
-#include "Client.hpp"
+#include "../includes/Client.hpp"
 
 Client::Client(int fd)
 {

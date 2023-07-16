@@ -6,13 +6,13 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 16:00:39 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/07/16 18:31:48 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
 
-Channel::Channel(std::string name) : _name(name)
+Channel::Channel(std::string name, std::string password) : _name(name), _password(password)
 {
 	;
 }
@@ -55,6 +55,10 @@ std::vector<std::string> Channel::getMessages() const
 	return (this->_messages);
 }
 
+std::string Channel::getPassword() const {
+	return this->_password;
+}
+
 // Setters
 
 void Channel::setName(std::string name)
@@ -70,6 +74,10 @@ void Channel::setClients(std::vector<Client *> clients)
 void Channel::setMessages(std::vector<std::string> messages)
 {
 	this->_messages = messages;
+}
+
+void Channel::setPassword(std::string password) {
+	this->_password = password;
 }
 
 void Channel::addClient(Client *client)
