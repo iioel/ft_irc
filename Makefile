@@ -6,37 +6,49 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/07/16 14:56:17 by ycornamu         ###   ########.fr        #
+#    Updated: 2023/07/16 15:15:04 by lduboulo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ft_irc
+# Colors
 
-SRCS = main.cpp \
-	   IRCServer.cpp \
-	   Client.cpp \
-	   Channel.cpp \
-	   Message.cpp 
-SRCS_DIR = srcs
+GREEN	= \033[1;32m
+RED		= \033[1;31m
+ORANGE	= \033[1;33m
+BUILD	= \e[38;5;225m
+SEP		= \e[38;5;120m
+DUCK	= \e[38;5;227m
+RESET	= \033[0m
 
-OBJS = $(SRCS:.cpp=.o)
-OBJS_DIR = objs
+# Colors
 
-_SRCS = $(addprefix $(SRCS_DIR)/, $(SRCS))
-_OBJS = $(addprefix $(OBJS_DIR)/, $(OBJS))
+NAME		= ft_irc
 
-DIRS = $(OBJS_DIR)
+SRCS 		= main.cpp \
+			  IRCServer.cpp \
+			  Client.cpp \
+			  Channel.cpp \
+			  Message.cpp 
 
-HEADERS = includes
+SRCS_DIR	= srcs
 
-CC = c++
-CFLAGS = -I $(HEADERS) -Wall -Wextra -Werror -std=c++98
-LFLAGS =
+OBJS		= $(SRCS:.cpp=.o)
+OBJS_DIR 	= objs
+
+_SRCS 		= $(addprefix $(SRCS_DIR)/, $(SRCS))
+_OBJS 		= $(addprefix $(OBJS_DIR)/, $(OBJS))
+
+DIRS 		= $(OBJS_DIR)
+
+HEADERS 	= includes
+
+CC 			= c++
+CFLAGS 		= -I $(HEADERS) -Wall -Wextra -Werror -std=c++98
+LFLAGS 		=
 
 DEBUG_CFLAGS = -g -fsanitize=leak -fno-omit-frame-pointer
 DEBUG_LFLAGS = -fsanitize=leak
 
-.PHONY : all clean fclean re
 
 all: $(NAME)
 
@@ -45,18 +57,25 @@ leak: CFLAGS += $(DEBUG_CFLAGS)
 leak: $(NAME)
 
 $(NAME): $(_OBJS)
-	$(CC) $(_OBJS) $(LFLAGS) -o $(NAME)
+	@printf "\n"
+	@$(CC) $(_OBJS) $(LFLAGS) -o $(NAME)
+	@printf "${GREEN} 💻 Successfully created ${NAME}${RESET} ✅\n"
 
 $(_OBJS): $(OBJS_DIR)/%.o : $(SRCS_DIR)/%.cpp $(DIRS)
-	$(CC) -c $(CFLAGS) $< -o $@
+	@${CC} ${CFLAGS} -o $@ -c $< -I${HEADERS}
+	@printf "\e[1K\r${BUILD} 🚧 $@ from $<${RESET}"
 
 $(DIRS):
-	mkdir -p $(DIRS)
+	@mkdir -p $(DIRS)
 
 clean:
-	rm -rf $(_OBJS)
+	@rm -rf $(_OBJS)
+	@printf "${RED}Deleted ${NAME} objects${RESET}\n"
 
-fclean:
-	rm -rf $(_OBJS) $(NAME)
+fclean: clean
+	@rm -rf $(NAME)
+	@printf "${RED}Deleted ${NAME} bin${RESET}\n"
 
 re: fclean all
+
+.PHONY : all clean fclean re
