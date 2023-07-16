@@ -6,12 +6,12 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 15:05:07 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 16:44:44 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCServer.hpp"
-#include "Message.hpp"
+#include "../includes/IRCServer.hpp"
+#include "../includes/Message.hpp"
 
 IRCServer::IRCServer()
 {

@@ -6,11 +6,11 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 14:54:35 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 16:00:39 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
+#include "../includes/Channel.hpp"
 
 Channel::Channel(std::string name) : _name(name)
 {
