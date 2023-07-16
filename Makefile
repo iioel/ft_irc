@@ -6,7 +6,7 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/07/16 15:18:28 by lduboulo         ###   ########.fr        #
+#    Updated: 2023/07/16 17:17:18 by lduboulo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ SRCS 		= main.cpp \
 			  IRCServer.cpp \
 			  Client.cpp \
 			  Channel.cpp \
-			  Message.cpp 
+			  Message.cpp \
+			  commands/Cap.cpp
 
 SRCS_DIR	= srcs
 
@@ -38,7 +39,7 @@ OBJS_DIR 	= objs
 _SRCS 		= $(addprefix $(SRCS_DIR)/, $(SRCS))
 _OBJS 		= $(addprefix $(OBJS_DIR)/, $(OBJS))
 
-DIRS 		= $(OBJS_DIR)
+DIRS 		= $(OBJS_DIR) $(OBJS_DIR)/commands
 
 HEADERS 	= includes
 
@@ -46,8 +47,8 @@ CC 			= c++
 CFLAGS 		= -I $(HEADERS) -Wall -Wextra -Werror -std=c++98
 LFLAGS 		=
 
-DEBUG_CFLAGS = -g -fsanitize=leak -fno-omit-frame-pointer
-DEBUG_LFLAGS = -fsanitize=leak
+DEBUG_CFLAGS = -g -fsanitize=address -fno-omit-frame-pointer
+DEBUG_LFLAGS = -fsanitize=address
 
 
 all: $(NAME)

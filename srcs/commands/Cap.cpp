@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/14 16:24:46 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 16:04:09 by ycornamu         ###   ########.fr       */
+/*   Created: 2023/07/16 15:08:33 by ycornamu          #+#    #+#             */
+/*   Updated: 2023/07/16 16:11:11 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <cstdlib>
 #include "IRCServer.hpp"
 
-int main(int argc, char **argv)
+std::string	IRCServer::_processCap(Message request, Client & client)
 {
-	IRCServer ircserv;
+	std::vector<std::string>	params = request.getParams();
 
-	if (argc == 3)
+	if (params[0] == "LS")
+		return ("CAP * LS :\r\n");
+	if (params[0] == "END")
 	{
-		if (ircserv.init(atoi(argv[1]), argv[2]))
-			return (1);
-		ircserv.run();
+		client.setConnected(true);
+		return ("");
 	}
-	else
-		std::cout << "Usage: ./ircserv [port] [password]" << std::endl;
-	return (0);
+	return ("");
 }

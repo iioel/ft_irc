@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 15:06:03 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 16:47:10 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include "perror.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
+# include "Message.hpp"
 
 class IRCServer
 {
@@ -51,7 +52,7 @@ class IRCServer
 		fd_set 	_writefds;
 		std::string 				_motd;
 		std::string 				_password;
-		std::map<int, Client *> 	_clients;
+		std::vector<Client> 		_clients;
 		std::vector<Channel> 		_channels;
 
 		int 	_initSocket();
@@ -66,21 +67,21 @@ class IRCServer
 		void		_processRequest(Client & client);
 
 
-//		_processCap(std::string request, Client & client);
-//		_processPass(std::string request, Client & client);
-//		_processNick(std::string request, Client & client);
-//		_processUser(std::string request, Client & client);
-//		_processPing(std::string request, Client & client);
-//		_processPong(std::string request, Client & client);
-//		_processOper(std::string request, Client & client);
-//		_processQuit(std::string request, Client & client);
-//		_processJoin(std::string request, Client & client);
-//		_processPrivmsg(std::string request, Client & client);
-//		_processMotd(std::string request, Client & client);
-//		_processKick(std::string request, Client & client);
-//		_processInvite(std::string request, Client & client);
-//		_processTopic(std::string request, Client & client);
-//		_processMode(std::string request, Client & client);
+		std::string	_processCap(Message request, Client & client);
+//		std::string	_processPass(Message request, Client & client);
+//		std::string	_processNick(Message request, Client & client);
+//		std::string	_processUser(Message request, Client & client);
+//		std::string	_processPing(Message request, Client & client);
+//		std::string	_processPong(Message request, Client & client);
+//		std::string	_processOper(Message request, Client & client);
+//		std::string	_processQuit(Message request, Client & client);
+//		std::string	_processJoin(Message request, Client & client);
+//		std::string	_processPrivmsg(Message request, Client & client);
+//		std::string	_processMotd(Message request, Client & client);
+//		std::string	_processKick(Message request, Client & client);
+//		std::string	_processInvite(Message request, Client & client);
+//		std::string	_processTopic(Message request, Client & client);
+//		std::string	_processMode(Message request, Client & client);
 };
 
 #endif
