@@ -6,7 +6,7 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/07/16 15:15:04 by lduboulo         ###   ########.fr        #
+#    Updated: 2023/07/16 15:18:28 by lduboulo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ $(DIRS):
 	@mkdir -p $(DIRS)
 
 clean:
-	@rm -rf $(_OBJS)
+	@rm -rf $(DIRS)
 	@printf "${RED}Deleted ${NAME} objects${RESET}\n"
 
 fclean: clean
