@@ -6,7 +6,7 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/07/16 16:59:17 by ycornamu         ###   ########.fr        #
+#    Updated: 2023/07/16 17:17:18 by lduboulo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRCS 		= main.cpp \
 			  Client.cpp \
 			  Channel.cpp \
 			  Message.cpp \
-			  commands.cpp
+			  commands/Cap.cpp
 
 SRCS_DIR	= srcs
 
@@ -39,7 +39,7 @@ OBJS_DIR 	= objs
 _SRCS 		= $(addprefix $(SRCS_DIR)/, $(SRCS))
 _OBJS 		= $(addprefix $(OBJS_DIR)/, $(OBJS))
 
-DIRS 		= $(OBJS_DIR)
+DIRS 		= $(OBJS_DIR) $(OBJS_DIR)/commands
 
 HEADERS 	= includes
 
