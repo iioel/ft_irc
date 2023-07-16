@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 20:17:27 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 22:22:11 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,21 +70,21 @@ class IRCServer
 		void 		_sendToAllButOne(std::string message, Client & client);
 
 
-		std::string	_processCap(Message request, Client & client);
-//		std::string	_processPass(Message request, Client & client);
-		std::string	_processNick(Message request, Client & client);
-		std::string	_processUser(Message request, Client & client);
-//		std::string	_processPing(Message request, Client & client);
-//		std::string	_processPong(Message request, Client & client);
-//		std::string	_processOper(Message request, Client & client);
-//		std::string	_processQuit(Message request, Client & client);
-		std::string	_processJoin(Message request, Client & client);
-//		std::string	_processPrivmsg(Message request, Client & client);
-//		std::string	_processMotd(Message request, Client & client);
-//		std::string	_processKick(Message request, Client & client);
-//		std::string	_processInvite(Message request, Client & client);
-//		std::string	_processTopic(Message request, Client & client);
-//		std::string	_processMode(Message request, Client & client);
+		int	_processCap(Message request, Client & client);
+//		int	_processPass(Message request, Client & client);
+		int	_processNick(Message request, Client & client);
+		int	_processUser(Message request, Client & client);
+//		int	_processPing(Message request, Client & client);
+//		int	_processPong(Message request, Client & client);
+//		int	_processOper(Message request, Client & client);
+//		int	_processQuit(Message request, Client & client);
+		int	_processJoin(Message request, Client & client);
+//		int	_processPrivmsg(Message request, Client & client);
+//		int	_processMotd(Message request, Client & client);
+//		int	_processKick(Message request, Client & client);
+//		int	_processInvite(Message request, Client & client);
+//		int	_processTopic(Message request, Client & client);
+//		int	_processMode(Message request, Client & client);
 };
 
 #endif

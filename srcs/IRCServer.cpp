@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 21:03:15 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 22:29:28 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,8 +214,6 @@ void IRCServer::_processRequest(Client & client)
 //			response = this->_processTopic(request, client);
 //		else if (request.getPrefix() == "MODE")
 //			response = this->_processMode(request, client);
-		std::cout << "Response message ==> : " << response << std::endl;
-		client.addResponse(response);
 	}
 }
 
@@ -267,7 +265,7 @@ void IRCServer::_sendToAll(std::string message)
 	std::vector<Client>::iterator it = this->_clients.begin();
 	while (it != this->_clients.end())
 	{
-		it->addResponse(message);
+		it->send(message);
 		it++;
 	}
 }
@@ -278,7 +276,7 @@ void IRCServer::_sendToAllButOne(std::string message, Client & client)
 	while (it != this->_clients.end())
 	{
 		if (it->getSocket() != client.getSocket())
-			it->addResponse(message);
+			it->send(message);
 		it++;
 	}
 }

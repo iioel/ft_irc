@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:12:41 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 20:49:54 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 22:28:11 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,11 @@ class Client
 		void	setUsername(std::string username);
 		void	setRealname(std::string realname);
 		void	setRequest(std::string request);
-		void	addResponse(std::string response);
 		void	clearResponse();
+
+		// Other
+		
+		int		send(std::string msg);
 };
 
 #endif

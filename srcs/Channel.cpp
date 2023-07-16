@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 19:11:45 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/07/16 22:32:02 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,14 +130,14 @@ void Channel::removeModerator(Client *moderator) {
 
 void Channel::addMessage(std::string message)
 {
-	message = "Server: " + message + "\r\n";
+	message = "Server: " + message;
 	this->_messages.push_back(message);
 	this->_sendToAll(message);
 }
 
 void Channel::addMessage(std::string message, Client *client)
 {
-	message = client->getNickname() + ": " + message + "\r\n";
+	message = client->getNickname() + ": " + message;
 	this->_messages.push_back(message);
 	this->_sendToAllButOne(message, client);
 }
@@ -147,7 +147,7 @@ void Channel::_sendToAll(std::string message)
 	std::vector<Client *>::iterator it = this->_clients.begin();
 	while (it != this->_clients.end())
 	{
-		(*it)->addResponse(message);
+		(*it)->send(message);
 		it++;
 	}
 }
@@ -158,7 +158,7 @@ void Channel::_sendToAllButOne(std::string message, Client *client)
 	while (it != this->_clients.end())
 	{
 		if (*it != client)
-			(*it)->addResponse(message);
+			(*it)->send(message);
 		it++;
 	}
 }

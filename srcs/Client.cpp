@@ -6,11 +6,12 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 20:57:09 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 22:28:47 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string>
+#include <iostream>
 #include <sys/select.h>
 
 #include "../includes/Client.hpp"
@@ -125,11 +126,6 @@ void	Client::setRequest(std::string request)
 	this->_request = request;
 }
 
-void	Client::addResponse(std::string response)
-{
-	this->_response += response;
-}
-
 void	Client::clearResponse()
 {
 	this->_response.clear();
@@ -153,4 +149,13 @@ bool Client::isConnected() const
 void Client::setConnected(bool isConnected)
 {
 	this->_isConnected = isConnected;
+}
+
+// Other
+
+int Client::send(std::string msg)
+{
+	std::cout << "Response message ==> : " << msg << std::endl;
+	_response += msg + "\r\n";
+	return (0);
 }
