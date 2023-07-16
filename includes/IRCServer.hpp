@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 18:31:38 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 18:43:39 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ class IRCServer
 //		std::string	_processPong(Message request, Client & client);
 //		std::string	_processOper(Message request, Client & client);
 //		std::string	_processQuit(Message request, Client & client);
-//		std::string	_processJoin(Message request, Client & client);
+		std::string	_processJoin(Message request, Client & client);
 //		std::string	_processPrivmsg(Message request, Client & client);
 //		std::string	_processMotd(Message request, Client & client);
 //		std::string	_processKick(Message request, Client & client);

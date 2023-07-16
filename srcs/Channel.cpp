@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 18:31:48 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/07/16 19:11:45 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Channel::Channel(std::string name, std::string password) : _name(name), _password(password)
 {
-	;
+	this->_isInviteOnly = false;
 }
 
 Channel::~Channel()
@@ -50,6 +50,10 @@ std::vector<Client *> Channel::getClients() const
 	return (this->_clients);
 }
 
+std::vector<Client *> Channel::getModerators() const {
+	return this->_moderators;
+}
+
 std::vector<std::string> Channel::getMessages() const
 {
 	return (this->_messages);
@@ -57,6 +61,10 @@ std::vector<std::string> Channel::getMessages() const
 
 std::string Channel::getPassword() const {
 	return this->_password;
+}
+
+bool Channel::isChannelInviteOnly() const {
+	return this->_isInviteOnly;
 }
 
 // Setters
@@ -71,6 +79,10 @@ void Channel::setClients(std::vector<Client *> clients)
 	this->_clients = clients;
 }
 
+void Channel::setModerators(std::vector<Client *> moderators) {
+	this->_moderators = moderators;
+}
+
 void Channel::setMessages(std::vector<std::string> messages)
 {
 	this->_messages = messages;
@@ -80,7 +92,11 @@ void Channel::setPassword(std::string password) {
 	this->_password = password;
 }
 
-void Channel::addClient(Client *client)
+void Channel::setIsChannelInviteOnly(bool isInviteOnly) {
+	this->_isInviteOnly = isInviteOnly;
+}
+
+void Channel::addClient(Client *client) // What if the client is already in the channel
 {
 	this->_clients.push_back(client);
 }
@@ -96,6 +112,19 @@ void Channel::removeClient(Client *client)
 			break ;
 		}
 		it++;
+	}
+}
+
+void Channel::addModerator(Client *moderator) { // Same as addClient
+	this->_moderators.push_back(moderator);
+}
+
+void Channel::removeModerator(Client *moderator) {
+	for (std::vector<Client *>::iterator it = this->_moderators.begin(); it != this->_moderators.end() ;it++) {
+		if (*it == moderator) {
+			this->_moderators.erase(it);
+			return ;
+		}
 	}
 }
 
