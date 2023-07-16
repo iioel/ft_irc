@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 16:52:28 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/15 17:02:34 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/16 22:36:10 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class Message
 {
 	private:
 		std::string _message;
+		std::string _sender;
 		std::string _prefix;
 		std::vector<std::string> _params;
 
@@ -33,6 +34,7 @@ class Message
 		Message & operator=(Message const & src);
 	
 		std::string getMessage() const;
+		std::string getSender() const;
 		std::string getPrefix() const;
 		std::vector<std::string> getParams() const;
 	

@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 16:55:38 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 19:44:42 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 22:50:27 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ Message::Message() : _message(""), _prefix(""), _params(0)
 	;
 }
 
-Message::Message(std::string message) : _message(message), _prefix(""), _params(0)
+Message::Message(std::string message) : _prefix(""), _params(0)
 {
+	message.erase(std::remove(message.begin(), message.end(), '\r'), message.end());
+	this->_message = message;
 	if (message != "")
 		this->_parse();
 }
@@ -86,6 +88,7 @@ std::vector<std::string> Message::getParams() const
 void Message::setMessage(std::string message)
 {
 
+	message.erase(std::remove(message.begin(), message.end(), '\r'), message.end());
 	this->_message = message;
 	if (message != "")
 		this->_parse();
@@ -96,11 +99,22 @@ void Message::_parse()
 	std::string param;
 	std::stringstream ss(this->_message);
 
+	if (this->_message[0] == ':')
+		std::getline(ss, this->_sender, ' ');
+
 	std::getline(ss, this->_prefix, ' ');
-	this->_prefix.erase(std::remove(this->_prefix.begin(), this->_prefix.end(), '\r'), this->_prefix.end());
+
 	while (std::getline(ss, param, ' '))
 	{
-		param.erase(std::remove(param.begin(), param.end(), '\r'), param.end());
+		if (param[0] == ':')
+		{
+			std::string tmp;
+			
+			while (std::getline(ss, tmp, ' '))
+				param += " " + tmp;
+			this->_params.push_back(param);
+			break ;
+		}
 		this->_params.push_back(param);
 	}
 }
