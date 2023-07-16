@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 18:35:22 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/07/16 18:36:09 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,8 @@ void IRCServer::_processRequest(Client & client)
 //			response = this->_processPass(request, client);
 		else if (request.getPrefix() == "NICK")
 			response = this->_processNick(request, client);
-//		else if (request.getPrefix() == "USER")
-//			response = this->_processUser(request, client);
+		else if (request.getPrefix() == "USER")
+			response = this->_processUser(request, client);
 //		else if (request.getPrefix() == "PING")									ycornamu
 //			response = this->_processPing(request, client);
 //		else if (request.getPrefix() == "PONG")
@@ -266,11 +266,4 @@ int sendToClient(Client & client, std::string const & message)
 {
 	client.addResponse(message);
 	return 0;
-}
-
-std::string	IRCServer::_genReply(std::string reply_code, Client & client, std::string message)
-{
-	std::string reply = ":" + this->_server_name + " " + reply_code + " "
-					  + client.getNickname() + " " + message + "\r\n";
-	return(reply);
 }
