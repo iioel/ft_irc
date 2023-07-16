@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 18:43:39 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/07/16 20:17:27 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ class IRCServer
 		void		_addClient(int fd);
 		void		_removeClient(Client & client);
 		void		_processRequest(Client & client);
+		void		_sendToAll(std::string message);
+		void 		_sendToAllButOne(std::string message, Client & client);
 
 
 		std::string	_processCap(Message request, Client & client);

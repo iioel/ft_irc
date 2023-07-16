@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 17:58:13 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/07/16 20:57:09 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 Client::Client(int fd)
 {
 	this->_socket = fd;
+	this->_isConnected = false;
+	this->_isRegistered = false;
 	this->_nickname = "";
 	this->_username = "";
 	this->_realname = "";
@@ -40,6 +42,8 @@ Client & Client::operator=(Client const & src)
 	if (this != &src)
 	{
 		this->_socket = src._socket;
+		this->_isConnected = src._isConnected;
+		this->_isRegistered = src._isRegistered;
 		this->_nickname = src._nickname;
 		this->_username = src._username;
 		this->_realname = src._realname;

@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 19:48:27 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/16 21:03:15 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,6 @@ int IRCServer::_recv(Client & client)
 		else
 		{
 			buffer[ret] = '\0';
-			std::cout << "Received: " << buffer << std::endl;
 			client.setRequest(buffer);
 			this->_processRequest(client);
 		}
@@ -181,6 +180,7 @@ void IRCServer::_processRequest(Client & client)
 	while (getline(ss, line))
 	{
 		Message request = Message(line);
+		std::cout << "Received message <== : " << request.getMessage() << std::endl;
 
 		std::string response;
 		if (request.getPrefix() == "CAP")
@@ -214,6 +214,7 @@ void IRCServer::_processRequest(Client & client)
 //			response = this->_processTopic(request, client);
 //		else if (request.getPrefix() == "MODE")
 //			response = this->_processMode(request, client);
+		std::cout << "Response message ==> : " << response << std::endl;
 		client.addResponse(response);
 	}
 }
@@ -254,7 +255,6 @@ int IRCServer::_send(Client & client)
 			}
 			else
 			{
-				std::cout << "Sent: " << buffer << std::endl;
 				client.clearResponse();
 			}
 		}
@@ -262,8 +262,23 @@ int IRCServer::_send(Client & client)
 	return 0;
 }
 
-int sendToClient(Client & client, std::string const & message)
+void IRCServer::_sendToAll(std::string message)
 {
-	client.addResponse(message);
-	return 0;
+	std::vector<Client>::iterator it = this->_clients.begin();
+	while (it != this->_clients.end())
+	{
+		it->addResponse(message);
+		it++;
+	}
+}
+
+void IRCServer::_sendToAllButOne(std::string message, Client & client)
+{
+	std::vector<Client>::iterator it = this->_clients.begin();
+	while (it != this->_clients.end())
+	{
+		if (it->getSocket() != client.getSocket())
+			it->addResponse(message);
+		it++;
+	}
 }
