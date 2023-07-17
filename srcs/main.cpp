@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:24:46 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 16:04:09 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 17:37:04 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ int main(int argc, char **argv)
 		ircserv.run();
 	}
 	else
-		std::cout << "Usage: ./ircserv [port] [password]" << std::endl;
+		std::cout << "Usage: ./ft_irc [port] [password]" << std::endl;
 	return (0);
 }
