@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 17:08:39 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 17:24:07 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,8 @@ void IRCServer::_processRequest(Client & client)
 			this->_processNick(request, client);
 		else if (request.getPrefix() == "USER")
 			this->_processUser(request, client);
-//		else if (request.getPrefix() == "PING")									ycornamu
-//			this->_processPing(request, client);
+		else if (request.getPrefix() == "PING")//								ycornamu
+			this->_processPing(request, client);
 //		else if (request.getPrefix() == "PONG")
 //			this->_processPong(request, client);
 //		else if (request.getPrefix() == "OPER")

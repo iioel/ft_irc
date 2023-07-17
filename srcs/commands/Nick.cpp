@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:19:54 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/16 22:26:02 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 17:25:51 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 bool checkNickname(std::string nickname)
 {
 	if (! std::strchr(nickname.c_str(), '#')
-		&& ! std::strchr(nickname.c_str(), '&') 
+		&& ! std::strchr(nickname.c_str(), '&')
 		&& ! std::strchr(nickname.c_str(), ':')
 		&& ! std::strchr(nickname.c_str(), ' '))
 		return (true);
@@ -33,7 +33,7 @@ bool checkNicknameExist(std::string nickname, std::vector<Client> clients)
 	return (false);
 }
 
-int	IRCServer::_processNick(Message request, Client & client)
+int	IRCServer::_processNick(Message & request, Client & client)
 {
 	std::vector<std::string> params = request.getParams();
 	if (params.size() == 0)
