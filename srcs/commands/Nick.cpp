@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:19:54 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/17 17:25:51 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 22:16:24 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,15 @@
 
 bool checkNickname(std::string nickname)
 {
-	if (! std::strchr(nickname.c_str(), '#')
-		&& ! std::strchr(nickname.c_str(), '&')
-		&& ! std::strchr(nickname.c_str(), ':')
-		&& ! std::strchr(nickname.c_str(), ' '))
+	if (nickname.find(" ") == std::string::npos
+		&& nickname.find(",") == std::string::npos
+		&& nickname.find("*") == std::string::npos
+		&& nickname.find("?") == std::string::npos
+		&& nickname.find("!") == std::string::npos
+		&& nickname.find("@") == std::string::npos
+		&& nickname[0] != '$' && nickname[0] != ':'
+		&& nickname[0] != '#' && nickname[0] != '&'
+		&& nickname.find(".") == std::string::npos)
 		return (true);
 	return (false);
 }
