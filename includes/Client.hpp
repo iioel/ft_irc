@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:12:41 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 21:14:27 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 15:57:45 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ class Client
 
 		int				_socket;
 		bool			_isConnected;
+		bool			_isLogged;
 		bool			_isRegistered;
 		bool			_isPong;
+		bool			_isRemoved;
 		struct timeval	_pingTime;
 		fd_set &		_allwritefds;
 		std::string		_pingStr;
@@ -48,8 +50,10 @@ class Client
 		// Getter
 		int			getSocket() const;
 		bool		isConnected() const;
+		bool		isLogged() const;
 		bool		isRegistered() const;
 		bool		isPong() const;
+		bool		isRemoved() const;
 		std::string	getPingStr() const;
 		std::string	getNickname() const;
 		std::string	getUsername() const;
@@ -61,6 +65,7 @@ class Client
 		// Setter
 		void	setSocket(int fd);
 		void	setConnected(bool isConnected);
+		void	setLogged(bool isLogged);
 		void	setRegistered(bool isRegistered);
 		void	setPong(bool isPong);
 		void	setNickname(std::string nickname);
@@ -69,6 +74,7 @@ class Client
 		void	addRequest(std::string request);
 		void	setResponse(std::string request);
 		void	clearResponse();
+		void 	remove();
 
 		// Other
 

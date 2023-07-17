@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 21:12:37 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 16:01:56 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ Client::Client(int fd, fd_set & allwritefds): _allwritefds(allwritefds)
 {
 	this->_socket = fd;
 	this->_isConnected = false;
+	this->_isLogged = false;
 	this->_isRegistered = false;
+	this->_isRemoved = false;
 	this->_isPong = true;
-	this->_nickname = "";
+	this->_nickname = "*";
 	this->_username = "";
 	this->_realname = "";
 	this->_request = "";
@@ -46,7 +48,9 @@ Client & Client::operator=(Client const & src)
 	{
 		this->_socket = src._socket;
 		this->_isConnected = src._isConnected;
+		this->_isLogged = src._isLogged;
 		this->_isRegistered = src._isRegistered;
+		this->_isRemoved = src._isRemoved;
 		this->_isPong = src._isPong;
 		this->_pingTime = src._pingTime;
 		this->_pingStr = src._pingStr;
@@ -186,6 +190,26 @@ std::string Client::getPingStr() const
 struct timeval Client::getPingTime() const
 {
 	return (this->_pingTime);
+}
+
+void Client::setLogged(bool isLogged)
+{
+	this->_isLogged = isLogged;
+}
+
+bool Client::isLogged() const
+{
+	return (this->_isLogged);
+}
+
+void Client::remove()
+{
+	this->_isRemoved = true;
+}
+
+bool Client::isRemoved() const
+{
+	return (this->_isRemoved);
 }
 
 // Other

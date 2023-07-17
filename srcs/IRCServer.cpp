@@ -6,13 +6,15 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 22:51:15 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 16:44:59 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sstream>
+
 #include "IRCServer.hpp"
 #include "Message.hpp"
-#include <sstream>
+#include "Reply.hpp"
 
 IRCServer::IRCServer()
 {
@@ -56,13 +58,13 @@ int IRCServer::run()
 		{
 			if (this->_recv(*it))
 				break;
-			if (it->ping())
+			this->_send(*it);
+			if (it->ping() || (it->isRemoved() && it->getResponse().size() == 0))
 			{
 				this->_removeClient(*it);
 				break;
 			}
 
-			this->_send(*it);
 		}
 	}
 }
@@ -182,28 +184,34 @@ void IRCServer::_processRequest(Client & client)
 {
 	std::string line;
 
-	while ((line = client.getRequest()).size() != 0)
+	while ((line = client.getRequest()).size() != 0 && ! client.isRemoved())
 	{
 		Message request = Message(line);
 		std::cout << "Received message <== : " << request.getMessage() << std::endl;
 
 		if (request.getPrefix() == "CAP")
 			this->_processCap(request, client);
-//		else if (request.getPrefix() == "PASS")
-//			this->_processPass(request, client);
+		else if (request.getPrefix() == "PONG")
+			this->_processPong(request, client);
+		else if (request.getPrefix() == "PASS")
+			this->_processPass(request, client);
 		else if (request.getPrefix() == "NICK")
 			this->_processNick(request, client);
 		else if (request.getPrefix() == "USER")
 			this->_processUser(request, client);
-		else if (request.getPrefix() == "PING")//								ycornamu
+		else if (!client.isRegistered())
+		{
+			client.send(":" + this->_server_name + " " + ERR_NOTREGISTERED + " "
+					+ client.getNickname() + " :You have not registered");
+			break;
+		}
+		else if (request.getPrefix() == "PING")//				ycornamu
 			this->_processPing(request, client);
-		else if (request.getPrefix() == "PONG")
-			this->_processPong(request, client);
 //		else if (request.getPrefix() == "OPER")
 //			this->_processOper(request, client);
 		else if (request.getPrefix() == "QUIT")
 			this->_processQuit(request, client);
-//	------------------------------------------------------------------------------------------------------
+//	------------------------------------------------------------------------------
 //		else if (request.getPrefix() == "JOIN")
 //			this->_processJoin(request, client);
 //		else if (request.getPrefix() == "PRIVMSG")
@@ -212,7 +220,7 @@ void IRCServer::_processRequest(Client & client)
 //			this->_processMotd(request, client);
 //		else if (request.getPrefix() == "KICK")
 //			this->_processKick(request, client);
-//		else if (request.getPrefix() == "INVITE")								lduboulo
+//		else if (request.getPrefix() == "INVITE")			lduboulo
 //			this->_processInvite(request, client);
 //		else if (request.getPrefix() == "TOPIC")
 //			this->_processTopic(request, client);
@@ -228,6 +236,7 @@ void IRCServer::_addClient(int fd)
 
 void IRCServer::_removeClient(Client & client)
 {
+	std::cout << "Closing socket" << std::endl;
 	close(client.getSocket());
 	FD_CLR(client.getSocket(), &this->_allfds);
 	FD_CLR(client.getSocket(), &this->_readfds);

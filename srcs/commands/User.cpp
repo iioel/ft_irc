@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:09:38 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/17 17:26:01 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 16:48:12 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@
 int IRCServer::_processUser(Message & request, Client & client)
 {
 	std::vector<std::string>	params = request.getParams();
+
+	if (! client.isLogged())
+	{
+		client.send(":" + this->_server_name + " " + ERR_PASSWDMISMATCH + " "
+				+ client.getNickname() + " :Password incorrect");
+		client.send("ERROR :Closing Link: " + client.getNickname()
+				+ " (Bad password)");
+		client.remove();
+		return (1);
+	}
 
 	if (params.size() == 4)
 	{
