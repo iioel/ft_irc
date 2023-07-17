@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 17:12:46 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 18:53:25 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ Client::Client(int fd)
 	this->_socket = fd;
 	this->_isConnected = false;
 	this->_isRegistered = false;
+	this->_isPong = true;
 	this->_nickname = "";
 	this->_username = "";
 	this->_realname = "";
 	this->_request = "";
 	this->_response = "";
+	gettimeofday(&this->_pingTime, NULL);
 }
 
 Client::Client(Client const & src)
@@ -45,6 +47,9 @@ Client & Client::operator=(Client const & src)
 		this->_socket = src._socket;
 		this->_isConnected = src._isConnected;
 		this->_isRegistered = src._isRegistered;
+		this->_isPong = src._isPong;
+		this->_pingTime = src._pingTime;
+		this->_pingStr = src._pingStr;
 		this->_nickname = src._nickname;
 		this->_username = src._username;
 		this->_realname = src._realname;
@@ -158,6 +163,26 @@ void Client::setConnected(bool isConnected)
 	this->_isConnected = isConnected;
 }
 
+void Client::setPong(bool isPong)
+{
+	this->_isPong = isPong;
+}
+
+bool Client::isPong() const
+{
+	return (this->_isPong);
+}
+
+std::string Client::getPingStr() const
+{
+	return (this->_pingStr);
+}
+
+struct timeval Client::getPingTime() const
+{
+	return (this->_pingTime);
+}
+
 // Other
 
 int Client::send(std::string msg)
@@ -166,4 +191,31 @@ int Client::send(std::string msg)
 	_response += msg + "\r\n";
 	return (0);
 }
+
+int Client::ping()
+{
+	struct timeval now;
+	gettimeofday(&now, NULL);
+
+	if (now.tv_sec - this->_pingTime.tv_sec > 60 && ! this->_isPong)
+	{
+		this->send("ERROR :Closing Link: " + this->_nickname + " (Ping timeout)");
+		return (1);
+	}
+	else if (now.tv_sec - this->_pingTime.tv_sec > 30 && this->_isPong)
+	{
+		std::ostringstream oss;
+
+		this->_isPong = false;
+
+		oss << std::rand() % 1000000;
+		this->_pingStr = oss.str();
+
+		this->send("PING :" + this->_pingStr);
+		gettimeofday(&this->_pingTime, NULL);
+		return (0);
+	}
+	return (0);
+}
+
 

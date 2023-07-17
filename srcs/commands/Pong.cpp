@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Reply.hpp                                          :+:      :+:    :+:   */
+/*   Pong.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/16 17:33:53 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/17 18:10:43 by ycornamu         ###   ########.fr       */
+/*   Created: 2023/07/17 18:05:17 by ycornamu          #+#    #+#             */
+/*   Updated: 2023/07/17 19:17:47 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef Reply_HPP
-# define Reply_HPP
+#include "IRCServer.hpp"
+#include "Reply.hpp"
 
-# define RPL_WELCOME "001"
+int IRCServer::_processPong(Message & request, Client & client)
+{
+	std::vector<std::string> params = request.getParams();
 
-# define ERR_NOORIGIN "409"
-# define ERR_NONICKNAMEGIVEN "431"
-# define ERR_ERRONEUSNICKNAME "432"
-# define ERR_NICKNAMEINUSE "433"
-# define ERR_NEEDMOREPARAMS "461"
+	if (params.size() == 1)
+	{
+		if (client.getPingStr() == params[0])
+			client.setPong(true);
+		return (0);
+	}
 
-#endif
+	return (client.send(":" + this->_server_name + ERR_NOORIGIN + " "
+			+ client.getNickname() + " :No origin specified"));
+}

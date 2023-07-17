@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 17:24:07 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 19:01:35 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ int IRCServer::run()
 		{
 			if (this->_recv(*it))
 				break;
+			if (it->ping())
+			{
+				this->_removeClient(*it);
+				break;
+			}
 
 			this->_send(*it);
 		}
@@ -191,8 +196,8 @@ void IRCServer::_processRequest(Client & client)
 			this->_processUser(request, client);
 		else if (request.getPrefix() == "PING")//								ycornamu
 			this->_processPing(request, client);
-//		else if (request.getPrefix() == "PONG")
-//			this->_processPong(request, client);
+		else if (request.getPrefix() == "PONG")
+			this->_processPong(request, client);
 //		else if (request.getPrefix() == "OPER")
 //			this->_processOper(request, client);
 //		else if (request.getPrefix() == "QUIT")
@@ -250,9 +255,7 @@ int IRCServer::_send(Client & client)
 				return 1;
 			}
 			else
-			{
 				client.clearResponse();
-			}
 		}
 	}
 	return 0;

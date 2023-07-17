@@ -6,35 +6,12 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 16:55:38 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 22:50:27 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 19:03:54 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Message.hpp"
+#include "Message.hpp"
 #include <sstream>
-
-// class Message
-// {
-// 	private:
-// 		std::string _message;
-// 		std::string _prefix;
-// 		std::vector<std::string> _params;
-// 	
-// 	public:
-// 		Message();
-// 		Message(std::string message);
-// 		Message(Message const & src);
-// 		~Message();
-// 		Message & operator=(Message const & src);
-// 	
-// 		std::string getMessage() const;
-// 		std::string getPrefix() const;
-// 		std::vector<std::string> getParams() const;
-// 	
-// 		void setMessage(std::string message);
-// 	
-// 		void parseMessage();
-// };
 
 Message::Message() : _message(""), _prefix(""), _params(0)
 {
@@ -109,7 +86,8 @@ void Message::_parse()
 		if (param[0] == ':')
 		{
 			std::string tmp;
-			
+
+			param.erase(0, 1);
 			while (std::getline(ss, tmp, ' '))
 				param += " " + tmp;
 			this->_params.push_back(param);

@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 17:25:15 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 18:12:14 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ class IRCServer
 		int	_processNick(Message & request, Client & client);
 		int	_processUser(Message & request, Client & client);
 		int	_processPing(Message & request, Client & client);
-//		int	_processPong(Message & request, Client & client);
+		int	_processPong(Message & request, Client & client);
 //		int	_processOper(Message & request, Client & client);
 //		int	_processQuit(Message & request, Client & client);
 		int	_processJoin(Message & request, Client & client);
