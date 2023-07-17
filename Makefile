@@ -6,7 +6,7 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/07/17 18:11:49 by ycornamu         ###   ########.fr        #
+#    Updated: 2023/07/17 22:52:47 by ycornamu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ SRCS 		= main.cpp \
 			  commands/Nick.cpp \
 			  commands/User.cpp \
 			  commands/Ping.cpp \
-			  commands/Pong.cpp
+			  commands/Pong.cpp \
+			  commands/Quit.cpp
 
 SRCS_DIR	= srcs
 

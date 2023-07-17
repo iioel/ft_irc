@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 21:34:00 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 22:51:15 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,8 +201,8 @@ void IRCServer::_processRequest(Client & client)
 			this->_processPong(request, client);
 //		else if (request.getPrefix() == "OPER")
 //			this->_processOper(request, client);
-//		else if (request.getPrefix() == "QUIT")
-//			this->_processQuit(request, client);
+		else if (request.getPrefix() == "QUIT")
+			this->_processQuit(request, client);
 //	------------------------------------------------------------------------------------------------------
 //		else if (request.getPrefix() == "JOIN")
 //			this->_processJoin(request, client);
