@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:12:41 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 22:28:11 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 17:09:47 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ class Client
 		std::string	getNickname() const;
 		std::string	getUsername() const;
 		std::string	getRealname() const;
-		std::string	getRequest() const;
+		std::string	getRequest();
 		std::string	getResponse() const;
 
 		// Setter
@@ -56,11 +56,11 @@ class Client
 		void	setNickname(std::string nickname);
 		void	setUsername(std::string username);
 		void	setRealname(std::string realname);
-		void	setRequest(std::string request);
+		void	addRequest(std::string request);
 		void	clearResponse();
 
 		// Other
-		
+
 		int		send(std::string msg);
 };
 

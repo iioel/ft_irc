@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 22:28:47 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 17:12:46 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,16 @@ std::string	Client::getRealname() const
 	return (this->_realname);
 }
 
-std::string	Client::getRequest() const
+std::string	Client::getRequest()
 {
-	return (this->_request);
+	size_t pos = this->_request.find("\r\n");
+	if (pos != std::string::npos)
+	{
+		std::string request = this->_request.substr(0, pos);
+		this->_request.erase(0, pos + 2);
+		return (request);
+	}
+	return ("");
 }
 
 std::string	Client::getResponse() const
@@ -121,9 +128,9 @@ void	Client::setRealname(std::string realname)
 	this->_realname = realname;
 }
 
-void	Client::setRequest(std::string request)
+void	Client::addRequest(std::string request)
 {
-	this->_request = request;
+	this->_request += request;
 }
 
 void	Client::clearResponse()
@@ -159,3 +166,4 @@ int Client::send(std::string msg)
 	_response += msg + "\r\n";
 	return (0);
 }
+

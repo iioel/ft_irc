@@ -6,12 +6,12 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 22:29:28 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 17:08:39 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/IRCServer.hpp"
-#include "../includes/Message.hpp"
+#include "IRCServer.hpp"
+#include "Message.hpp"
 #include <sstream>
 
 IRCServer::IRCServer()
@@ -165,7 +165,7 @@ int IRCServer::_recv(Client & client)
 		else
 		{
 			buffer[ret] = '\0';
-			client.setRequest(buffer);
+			client.addRequest(buffer);
 			this->_processRequest(client);
 		}
 	}
@@ -174,46 +174,44 @@ int IRCServer::_recv(Client & client)
 
 void IRCServer::_processRequest(Client & client)
 {
-	std::stringstream ss(client.getRequest());
 	std::string line;
 
-	while (getline(ss, line))
+	while ((line = client.getRequest()).size() != 0)
 	{
 		Message request = Message(line);
 		std::cout << "Received message <== : " << request.getMessage() << std::endl;
 
-		std::string response;
 		if (request.getPrefix() == "CAP")
-			response = this->_processCap(request, client);
+			this->_processCap(request, client);
 //		else if (request.getPrefix() == "PASS")
-//			response = this->_processPass(request, client);
+//			this->_processPass(request, client);
 		else if (request.getPrefix() == "NICK")
-			response = this->_processNick(request, client);
+			this->_processNick(request, client);
 		else if (request.getPrefix() == "USER")
-			response = this->_processUser(request, client);
+			this->_processUser(request, client);
 //		else if (request.getPrefix() == "PING")									ycornamu
-//			response = this->_processPing(request, client);
+//			this->_processPing(request, client);
 //		else if (request.getPrefix() == "PONG")
-//			response = this->_processPong(request, client);
+//			this->_processPong(request, client);
 //		else if (request.getPrefix() == "OPER")
-//			response = this->_processOper(request, client);
+//			this->_processOper(request, client);
 //		else if (request.getPrefix() == "QUIT")
-//			response = this->_processQuit(request, client);
+//			this->_processQuit(request, client);
 //	------------------------------------------------------------------------------------------------------
 //		else if (request.getPrefix() == "JOIN")
-//			response = this->_processJoin(request, client);
+//			this->_processJoin(request, client);
 //		else if (request.getPrefix() == "PRIVMSG")
-//			response = this->_processPrivmsg(request, client);
+//			this->_processPrivmsg(request, client);
 //		else if (request.getPrefix() == "MOTD")
-//			response = this->_processMotd(request, client);
+//			this->_processMotd(request, client);
 //		else if (request.getPrefix() == "KICK")
-//			response = this->_processKick(request, client);
+//			this->_processKick(request, client);
 //		else if (request.getPrefix() == "INVITE")								lduboulo
-//			response = this->_processInvite(request, client);
+//			this->_processInvite(request, client);
 //		else if (request.getPrefix() == "TOPIC")
-//			response = this->_processTopic(request, client);
+//			this->_processTopic(request, client);
 //		else if (request.getPrefix() == "MODE")
-//			response = this->_processMode(request, client);
+//			this->_processMode(request, client);
 	}
 }
 
