@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 19:01:35 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 21:34:00 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void IRCServer::_initFdSets()
 {
 	FD_ZERO(&this->_allfds);
 	FD_ZERO(&this->_readfds);
+	FD_ZERO(&this->_allwritefds);
 	FD_ZERO(&this->_writefds);
 	FD_SET(this->_socket, &this->_allfds);
 	this->_maxfd = this->_socket;
@@ -118,7 +119,7 @@ void IRCServer::_initFdSets()
 int IRCServer::_select()
 {
 	this->_readfds = this->_allfds;
-	this->_writefds = this->_allfds;
+	this->_writefds = this->_allwritefds;
 	if (select(this->_maxfd + 1, &this->_readfds, &this->_writefds, NULL, NULL) < 0)
 	{
 		std::cout << "Error" << std::endl;
@@ -222,7 +223,7 @@ void IRCServer::_processRequest(Client & client)
 
 void IRCServer::_addClient(int fd)
 {
-	this->_clients.push_back(Client(fd));
+	this->_clients.push_back(Client(fd, this->_allwritefds));
 }
 
 void IRCServer::_removeClient(Client & client)
@@ -231,6 +232,7 @@ void IRCServer::_removeClient(Client & client)
 	FD_CLR(client.getSocket(), &this->_allfds);
 	FD_CLR(client.getSocket(), &this->_readfds);
 	FD_CLR(client.getSocket(), &this->_writefds);
+	FD_CLR(client.getSocket(), &this->_allwritefds);
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 	{
 		if (it->getSocket() == client.getSocket())
@@ -245,17 +247,23 @@ int IRCServer::_send(Client & client)
 {
 	if (FD_ISSET(client.getSocket(), &this->_writefds))
 	{
+		std::cout << "Sending" << std::endl;
 		std::string buffer = client.getResponse();
 		if (buffer.size() > 0)
 		{
-			int ret = send(client.getSocket(), buffer.c_str(), buffer.size(), 0);
+			size_t ret = send(client.getSocket(), buffer.c_str(), buffer.size(), 0);
 			if (ret < 0)
 			{
 				std::cout << "Error" << std::endl;
 				return 1;
 			}
+			else if (ret < buffer.size())
+				client.setResponse(buffer.substr(ret));
 			else
+			{
 				client.clearResponse();
+				FD_CLR(client.getSocket(), &this->_allwritefds);
+			}
 		}
 	}
 	return 0;

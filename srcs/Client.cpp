@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 18:53:25 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 21:12:37 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <iostream>
 #include <sys/select.h>
 
-#include "../includes/Client.hpp"
+#include "Client.hpp"
 
-Client::Client(int fd)
+Client::Client(int fd, fd_set & allwritefds): _allwritefds(allwritefds)
 {
 	this->_socket = fd;
 	this->_isConnected = false;
@@ -30,7 +30,7 @@ Client::Client(int fd)
 	gettimeofday(&this->_pingTime, NULL);
 }
 
-Client::Client(Client const & src)
+Client::Client(Client const & src): _allwritefds(src._allwritefds)
 {
 	*this = src;
 }
@@ -138,6 +138,11 @@ void	Client::addRequest(std::string request)
 	this->_request += request;
 }
 
+void	Client::setResponse(std::string response)
+{
+	this->_response = response;
+}
+
 void	Client::clearResponse()
 {
 	this->_response.clear();
@@ -189,6 +194,8 @@ int Client::send(std::string msg)
 {
 	std::cout << "Response message ==> : " << msg << std::endl;
 	_response += msg + "\r\n";
+	if (! FD_ISSET(this->_socket, &this->_allwritefds))
+		FD_SET(this->_socket, &this->_allwritefds);
 	return (0);
 }
 

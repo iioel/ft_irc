@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:12:41 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 18:35:23 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 21:14:27 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class Client
 		bool			_isRegistered;
 		bool			_isPong;
 		struct timeval	_pingTime;
+		fd_set &		_allwritefds;
 		std::string		_pingStr;
 		std::string		_nickname;
 		std::string		_username;
@@ -36,7 +37,7 @@ class Client
 		std::string		_response;
 
 	public:
-		Client(int fd);
+		Client(int fd, fd_set & allwritefds);
 		Client(Client const & src);
 		~Client();
 		Client & operator=(Client const & src);
@@ -66,6 +67,7 @@ class Client
 		void	setUsername(std::string username);
 		void	setRealname(std::string realname);
 		void	addRequest(std::string request);
+		void	setResponse(std::string request);
 		void	clearResponse();
 
 		// Other

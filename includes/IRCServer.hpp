@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 18:12:14 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/17 20:57:12 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class IRCServer
 		int 	_maxfd;
 		fd_set 	_allfds;
 		fd_set 	_readfds;
+		fd_set 	_allwritefds;
 		fd_set 	_writefds;
 		std::string 				_server_name;
 		std::string 				_motd;
