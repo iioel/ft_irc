@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:12:41 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/18 15:57:45 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 18:32:00 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ class Client
 		std::string		_nickname;
 		std::string		_username;
 		std::string		_realname;
+		std::string		_hostname;
 		std::string		_request;
 		std::string		_response;
 
 	public:
-		Client(int fd, fd_set & allwritefds);
+		Client(int fd, fd_set & allwritefds, std::string hostname);
 		Client(Client const & src);
 		~Client();
 		Client & operator=(Client const & src);
@@ -58,6 +59,8 @@ class Client
 		std::string	getNickname() const;
 		std::string	getUsername() const;
 		std::string	getRealname() const;
+		std::string	getHostname() const;
+		std::string getFQUN() const;
 		std::string	getRequest();
 		std::string	getResponse() const;
 		struct timeval	getPingTime() const;

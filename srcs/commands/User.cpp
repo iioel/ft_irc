@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:09:38 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/18 16:48:12 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 18:34:05 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ int IRCServer::_processUser(Message & request, Client & client)
 		client.setUsername(params[0]);
 		client.setRealname(params[3]);
 
-		if (client.getNickname() != "" && ! client.isRegistered())
+		if (client.getNickname() != "*" && ! client.isRegistered())
 		{
 			client.setRegistered(true);
 			client.send(":" + this->_server_name + " " + RPL_WELCOME + " "
 				+ client.getNickname() + " :Welcome to the Internet Relay Network "
-				+ client.getNickname());
+				+ client.getFQUN());
 		}
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/18 16:01:56 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 18:32:37 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #include "Client.hpp"
 
-Client::Client(int fd, fd_set & allwritefds): _allwritefds(allwritefds)
+Client::Client(int fd, fd_set & allwritefds, std::string hostname): _allwritefds(allwritefds)
 {
 	this->_socket = fd;
 	this->_isConnected = false;
@@ -27,6 +27,7 @@ Client::Client(int fd, fd_set & allwritefds): _allwritefds(allwritefds)
 	this->_nickname = "*";
 	this->_username = "";
 	this->_realname = "";
+	this->_hostname = hostname;
 	this->_request = "";
 	this->_response = "";
 	gettimeofday(&this->_pingTime, NULL);
@@ -57,6 +58,7 @@ Client & Client::operator=(Client const & src)
 		this->_nickname = src._nickname;
 		this->_username = src._username;
 		this->_realname = src._realname;
+		this->_hostname = src._hostname;
 		this->_request = src._request;
 		this->_response = src._response;
 	}
@@ -210,6 +212,16 @@ void Client::remove()
 bool Client::isRemoved() const
 {
 	return (this->_isRemoved);
+}
+
+std::string Client::getHostname() const
+{
+	return (this->_hostname);
+}
+
+std::string Client::getFQUN() const
+{
+	return (this->_username + "!" + this->_username + "@" + this->_hostname);
 }
 
 // Other

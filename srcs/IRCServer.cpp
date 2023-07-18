@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/18 16:44:59 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 18:25:06 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,9 @@ int IRCServer::_accept()
 {
 	if (FD_ISSET(this->_socket, &this->_readfds))
 	{
-		int client = accept(this->_socket, NULL, NULL);
+		struct sockaddr addr;
+		socklen_t addrlen = sizeof(addr);
+		int client = accept(this->_socket, &addr, &addrlen);
 		if (client < 0)
 		{
 			std::cout << "Error" << std::endl;
@@ -143,7 +145,8 @@ int IRCServer::_accept()
 		else
 		{
 			std::cout << "New client connected" << std::endl;
-			this->_addClient(client);
+			std::string addrstr = inet_ntoa(((struct sockaddr_in *)&addr)->sin_addr);
+			this->_addClient(client, addrstr);
 		}
 		FD_SET(client, &this->_allfds);
 		if (client > this->_maxfd)
@@ -175,6 +178,32 @@ int IRCServer::_recv(Client & client)
 			buffer[ret] = '\0';
 			client.addRequest(buffer);
 			this->_processRequest(client);
+		}
+	}
+	return 0;
+}
+
+int IRCServer::_send(Client & client)
+{
+	if (FD_ISSET(client.getSocket(), &this->_writefds))
+	{
+		std::cout << "Sending" << std::endl;
+		std::string buffer = client.getResponse();
+		if (buffer.size() > 0)
+		{
+			size_t ret = send(client.getSocket(), buffer.c_str(), buffer.size(), 0);
+			if (ret < 0)
+			{
+				std::cout << "Error" << std::endl;
+				return 1;
+			}
+			else if (ret < buffer.size())
+				client.setResponse(buffer.substr(ret));
+			else
+			{
+				client.clearResponse();
+				FD_CLR(client.getSocket(), &this->_allwritefds);
+			}
 		}
 	}
 	return 0;
@@ -229,9 +258,9 @@ void IRCServer::_processRequest(Client & client)
 	}
 }
 
-void IRCServer::_addClient(int fd)
+void IRCServer::_addClient(int fd, std::string addr)
 {
-	this->_clients.push_back(Client(fd, this->_allwritefds));
+	this->_clients.push_back(Client(fd, this->_allwritefds, addr));
 }
 
 void IRCServer::_removeClient(Client & client)
@@ -252,31 +281,6 @@ void IRCServer::_removeClient(Client & client)
 	}
 }
 
-int IRCServer::_send(Client & client)
-{
-	if (FD_ISSET(client.getSocket(), &this->_writefds))
-	{
-		std::cout << "Sending" << std::endl;
-		std::string buffer = client.getResponse();
-		if (buffer.size() > 0)
-		{
-			size_t ret = send(client.getSocket(), buffer.c_str(), buffer.size(), 0);
-			if (ret < 0)
-			{
-				std::cout << "Error" << std::endl;
-				return 1;
-			}
-			else if (ret < buffer.size())
-				client.setResponse(buffer.substr(ret));
-			else
-			{
-				client.clearResponse();
-				FD_CLR(client.getSocket(), &this->_allwritefds);
-			}
-		}
-	}
-	return 0;
-}
 
 void IRCServer::_sendToAll(std::string message)
 {
