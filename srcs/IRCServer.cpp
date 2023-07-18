@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/18 18:25:06 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 18:42:24 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,8 +236,6 @@ void IRCServer::_processRequest(Client & client)
 		}
 		else if (request.getPrefix() == "PING")//				ycornamu
 			this->_processPing(request, client);
-//		else if (request.getPrefix() == "OPER")
-//			this->_processOper(request, client);
 		else if (request.getPrefix() == "QUIT")
 			this->_processQuit(request, client);
 //	------------------------------------------------------------------------------
@@ -245,8 +243,6 @@ void IRCServer::_processRequest(Client & client)
 //			this->_processJoin(request, client);
 //		else if (request.getPrefix() == "PRIVMSG")
 //			this->_processPrivmsg(request, client);
-//		else if (request.getPrefix() == "MOTD")
-//			this->_processMotd(request, client);
 //		else if (request.getPrefix() == "KICK")
 //			this->_processKick(request, client);
 //		else if (request.getPrefix() == "INVITE")			lduboulo
