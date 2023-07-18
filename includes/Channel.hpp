@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:16:09 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 19:11:52 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/07/19 15:37:28 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,6 @@ class Channel
 		bool						_isInviteOnly;
 		std::vector<Client *>		_moderators;
 		std::vector<Client *> 		_clients;
-		std::vector<std::string> 	_messages;
-
-		void _sendToAll(std::string message);
-		void _sendToAllButOne(std::string message, Client *client);
 
 	public:
 		Channel(std::string name, std::string password);
@@ -37,19 +33,17 @@ class Channel
 		Channel & operator=(Channel const & src);
 
 		// Getters
-		std::string getName() const;
-		std::vector<Client *> getClients() const;
-		std::vector<Client *> getModerators() const;
-		std::vector<std::string> getMessages() const;
-		std::string getPassword() const;
-		bool isChannelInviteOnly() const;
+		std::string 			getName() const;
+		std::vector<Client *> 	getClients() const;
+		std::vector<Client *> 	getModerators() const;
+		std::string				getPassword() const;
+		bool 					isChannelInviteOnly() const;
 
 		// Setters
 		void setName(std::string name);
 		void setPassword(std::string password);
 		void setClients(std::vector<Client *> clients);
 		void setModerators(std::vector<Client *> moderators);
-		void setMessages(std::vector<std::string> messages);
 		void setIsChannelInviteOnly(bool isInviteOnly);
 
 		void addClient(Client *client);
@@ -58,8 +52,12 @@ class Channel
 		void addModerator(Client *moderator);
 		void removeModerator(Client *moderator);
 
-		void addMessage(std::string message);
-		void addMessage(std::string message, Client *client);
+		void sendToAll(std::string message);
+		void sendToAllButOne(std::string message, Client *client);
+
 };
+
+Channel * 	checkChannelExist(std::string channelName, std::vector<Channel *> channels);
+bool		checkClientInChannel(Client * client, Channel * channel);
 
 #endif

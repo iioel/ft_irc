@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/16 22:32:02 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/19 15:47:24 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ Channel & Channel::operator=(Channel const & src)
 	{
 		this->_name = src._name;
 		this->_clients = src._clients;
-		this->_messages = src._messages;
 	}
 	return (*this);
 }
@@ -52,11 +51,6 @@ std::vector<Client *> Channel::getClients() const
 
 std::vector<Client *> Channel::getModerators() const {
 	return this->_moderators;
-}
-
-std::vector<std::string> Channel::getMessages() const
-{
-	return (this->_messages);
 }
 
 std::string Channel::getPassword() const {
@@ -81,11 +75,6 @@ void Channel::setClients(std::vector<Client *> clients)
 
 void Channel::setModerators(std::vector<Client *> moderators) {
 	this->_moderators = moderators;
-}
-
-void Channel::setMessages(std::vector<std::string> messages)
-{
-	this->_messages = messages;
 }
 
 void Channel::setPassword(std::string password) {
@@ -128,21 +117,7 @@ void Channel::removeModerator(Client *moderator) {
 	}
 }
 
-void Channel::addMessage(std::string message)
-{
-	message = "Server: " + message;
-	this->_messages.push_back(message);
-	this->_sendToAll(message);
-}
-
-void Channel::addMessage(std::string message, Client *client)
-{
-	message = client->getNickname() + ": " + message;
-	this->_messages.push_back(message);
-	this->_sendToAllButOne(message, client);
-}
-
-void Channel::_sendToAll(std::string message)
+void Channel::sendToAll(std::string message)
 {
 	std::vector<Client *>::iterator it = this->_clients.begin();
 	while (it != this->_clients.end())
@@ -152,7 +127,7 @@ void Channel::_sendToAll(std::string message)
 	}
 }
 
-void Channel::_sendToAllButOne(std::string message, Client *client)
+void Channel::sendToAllButOne(std::string message, Client *client)
 {
 	std::vector<Client *>::iterator it = this->_clients.begin();
 	while (it != this->_clients.end())
@@ -161,4 +136,27 @@ void Channel::_sendToAllButOne(std::string message, Client *client)
 			(*it)->send(message);
 		it++;
 	}
+}
+
+// Static functions
+
+Channel * checkChannelExist(std::string channelName, std::vector<Channel *> channels)
+{
+	for (std::vector<Channel *>::iterator it = channels.begin(); it != channels.end(); it++)
+	{
+		if ((*it)->getName() == channelName)
+			return (*it);
+	}
+	return (NULL);
+}
+
+bool	checkClientInChannel(Client * client, Channel * channel)
+{
+	std::vector<Client *> clients = channel->getClients();
+	for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++)
+	{
+		if ((*it) == client)
+			return (true);
+	}
+	return (false);
 }

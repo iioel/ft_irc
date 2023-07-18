@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/18 18:42:24 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 21:00:06 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ int IRCServer::run()
 	{
 		this->_select();
 		this->_accept();
-		for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+		for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 		{
-			if (this->_recv(*it))
+			if (this->_recv(**it))
 				break;
-			this->_send(*it);
-			if (it->ping() || (it->isRemoved() && it->getResponse().size() == 0))
+			this->_send(**it);
+			if ((*it)->ping() || ((*it)->isRemoved() && (*it)->getResponse().size() == 0))
 			{
-				this->_removeClient(*it);
+				this->_removeClient(**it);
 				break;
 			}
 
@@ -241,8 +241,8 @@ void IRCServer::_processRequest(Client & client)
 //	------------------------------------------------------------------------------
 //		else if (request.getPrefix() == "JOIN")
 //			this->_processJoin(request, client);
-//		else if (request.getPrefix() == "PRIVMSG")
-//			this->_processPrivmsg(request, client);
+		else if (request.getPrefix() == "PRIVMSG")
+			this->_processPrivmsg(request, client);
 //		else if (request.getPrefix() == "KICK")
 //			this->_processKick(request, client);
 //		else if (request.getPrefix() == "INVITE")			lduboulo
@@ -256,7 +256,7 @@ void IRCServer::_processRequest(Client & client)
 
 void IRCServer::_addClient(int fd, std::string addr)
 {
-	this->_clients.push_back(Client(fd, this->_allwritefds, addr));
+	this->_clients.push_back(new Client(fd, this->_allwritefds, addr));
 }
 
 void IRCServer::_removeClient(Client & client)
@@ -267,11 +267,12 @@ void IRCServer::_removeClient(Client & client)
 	FD_CLR(client.getSocket(), &this->_readfds);
 	FD_CLR(client.getSocket(), &this->_writefds);
 	FD_CLR(client.getSocket(), &this->_allwritefds);
-	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 	{
-		if (it->getSocket() == client.getSocket())
+		if ((*it)->getSocket() == client.getSocket())
 		{
 			this->_clients.erase(it);
+			delete *it;
 			break;
 		}
 	}
@@ -280,21 +281,21 @@ void IRCServer::_removeClient(Client & client)
 
 void IRCServer::_sendToAll(std::string message)
 {
-	std::vector<Client>::iterator it = this->_clients.begin();
+	std::vector<Client *>::iterator it = this->_clients.begin();
 	while (it != this->_clients.end())
 	{
-		it->send(message);
+		(*it)->send(message);
 		it++;
 	}
 }
 
 void IRCServer::_sendToAllButOne(std::string message, Client & client)
 {
-	std::vector<Client>::iterator it = this->_clients.begin();
+	std::vector<Client *>::iterator it = this->_clients.begin();
 	while (it != this->_clients.end())
 	{
-		if (it->getSocket() != client.getSocket())
-			it->send(message);
+		if ((*it)->getSocket() != client.getSocket())
+			(*it)->send(message);
 		it++;
 	}
 }

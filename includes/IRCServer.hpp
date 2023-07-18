@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/18 18:42:08 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 20:50:29 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ class IRCServer
 		std::string 				_server_name;
 		std::string 				_motd;
 		std::string 				_password;
-		std::vector<Client> 		_clients;
-		std::vector<Channel> 		_channels;
+		std::vector<Client *> 		_clients;
+		std::vector<Channel *> 		_channels;
 
 		int 	_initSocket();
 		void 	_initFdSets();
@@ -79,7 +79,7 @@ class IRCServer
 		int	_processPong(Message & request, Client & client);
 		int	_processQuit(Message & request, Client & client);
 		int	_processJoin(Message & request, Client & client);
-//		int	_processPrivmsg(Message & request, Client & client);
+		int	_processPrivmsg(Message & request, Client & client);
 //		int	_processKick(Message & request, Client & client);
 //		int	_processInvite(Message & request, Client & client);
 //		int	_processTopic(Message & request, Client & client);

@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:19:54 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/18 18:33:33 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/18 19:47:39 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,6 @@ bool checkNickname(std::string nickname)
 		&& nickname[0] != '#' && nickname[0] != '&'
 		&& nickname.find(".") == std::string::npos)
 		return (true);
-	return (false);
-}
-
-bool checkNicknameExist(std::string nickname, std::vector<Client> clients)
-{
-	for (std::vector<Client>::iterator it = clients.begin(); it != clients.end(); it++)
-	{
-		if (it->getNickname() == nickname)
-			return (true);
-	}
 	return (false);
 }
 

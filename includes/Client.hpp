@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:12:41 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/18 18:32:00 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/19 15:41:15 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <string>
 # include <sstream>
+# include <vector>
 # include <sys/time.h>
 # include <sys/select.h>
 
@@ -44,6 +45,7 @@ class Client
 		Client(Client const & src);
 		~Client();
 		Client & operator=(Client const & src);
+		bool	operator==(Client const & src);
 
 		bool isRequest(fd_set *readfds);
 		bool isResponse(fd_set *writefds);
@@ -84,5 +86,7 @@ class Client
 		int		send(std::string msg);
 		int 	ping();
 };
+
+Client * checkNicknameExist(std::string nickname, std::vector<Client *> clients);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/18 18:32:37 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/19 15:44:58 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ Client & Client::operator=(Client const & src)
 {
 	if (this != &src)
 	{
+		this->_allwritefds = src._allwritefds;
 		this->_socket = src._socket;
 		this->_isConnected = src._isConnected;
 		this->_isLogged = src._isLogged;
@@ -63,6 +64,13 @@ Client & Client::operator=(Client const & src)
 		this->_response = src._response;
 	}
 	return (*this);
+}
+
+bool Client::operator==(Client const & src)
+{
+	if (this->_nickname == src._nickname)
+		return (true);
+	return (false);
 }
 
 bool Client::isRequest(fd_set *readfds)
@@ -221,7 +229,7 @@ std::string Client::getHostname() const
 
 std::string Client::getFQUN() const
 {
-	return (this->_username + "!" + this->_username + "@" + this->_hostname);
+	return (this->_nickname + "!" + this->_username + "@" + this->_hostname);
 }
 
 // Other
@@ -261,4 +269,14 @@ int Client::ping()
 	return (0);
 }
 
+// Static
 
+Client * checkNicknameExist(std::string nickname, std::vector<Client *> clients)
+{
+	for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++)
+	{
+		if ((*it)->getNickname() == nickname)
+			return (*it);
+	}
+	return (NULL);
+}
