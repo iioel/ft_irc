@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:16:09 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/19 15:37:28 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/19 20:48:00 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,20 @@ class Channel
 {
 	private:
 		std::string 				_name;
+		std::string					_topic;
 		std::string					_password;
-		bool						_isInviteOnly;
-		std::vector<Client *>		_moderators;
-		std::vector<Client *> 		_clients;
+		int							_limit;
+		bool						_inviteFlag;
+		bool						_topicFlag;
+		bool						_passwordFlag;
+		bool						_limitFlag;
+		std::vector<Client *>		_invited;
+		std::vector<Client *> 		_members;
+		std::vector<Client *>		_chanops;
+		std::vector<Client *>		_chancreators;
 
 	public:
+		Channel(std::string name);
 		Channel(std::string name, std::string password);
 		~Channel();
 		Channel(Channel const & src);
@@ -34,23 +42,49 @@ class Channel
 
 		// Getters
 		std::string 			getName() const;
-		std::vector<Client *> 	getClients() const;
-		std::vector<Client *> 	getModerators() const;
 		std::string				getPassword() const;
-		bool 					isChannelInviteOnly() const;
+		std::string				getTopic() const;
+		int						getLimit() const;
+		std::vector<Client *> 	getInvited() const;
+		std::vector<Client *> 	getMembers() const;
+		std::vector<Client *> 	getChanops() const;
+		std::vector<Client *> 	getChancreators() const;
+
+		bool 					isInvited(Client *client) const;
+		bool 					isMember(Client *client) const;
+		bool 					isChanop(Client *client) const;
+		bool 					isChancreator(Client *client) const;
+
+		bool 					getInviteFlag() const;
+		bool 					getTopicFlag() const;
+		bool 					getPasswordFlag() const;
+		bool 					getLimitFlag() const;
 
 		// Setters
 		void setName(std::string name);
 		void setPassword(std::string password);
-		void setClients(std::vector<Client *> clients);
-		void setModerators(std::vector<Client *> moderators);
-		void setIsChannelInviteOnly(bool isInviteOnly);
+		void setTopic(std::string topic);
+		void setLimit(int limit);
+		void setInvited(std::vector<Client *> invited);
+		void setMembers(std::vector<Client *> members);
+		void setChanops(std::vector<Client *> chanops);
+		void setChancreators(std::vector<Client *> chancreators);
+		void setInviteFlag(bool inviteFlag);
+		void setTopicFlag(bool topicFlag);
+		void setPasswordFlag(bool passwordFlag);
+		void setLimitFlag(bool limitFlag);
 
-		void addClient(Client *client);
-		void removeClient(Client *client);
+		void addInvited(Client *client);
+		void removeInvited(Client *client);
 
-		void addModerator(Client *moderator);
-		void removeModerator(Client *moderator);
+		void addMember(Client *client);
+		void removeMember(Client *client);
+
+		void addChanop(Client *chanop);
+		void removeChanop(Client *chanop);
+
+		void addChancreator(Client *chancreator);
+		void removeChancreator(Client *chancreator);
 
 		void sendToAll(std::string message);
 		void sendToAllButOne(std::string message, Client *client);
@@ -58,6 +92,5 @@ class Channel
 };
 
 Channel * 	checkChannelExist(std::string channelName, std::vector<Channel *> channels);
-bool		checkClientInChannel(Client * client, Channel * channel);
 
 #endif

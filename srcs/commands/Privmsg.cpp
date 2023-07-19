@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 19:07:05 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/19 16:05:25 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:29:47 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	IRCServer::_processPrivmsg(Message & request, Client & client)
 			Channel * target = checkChannelExist(*it, this->_channels);
 			if (target)
 			{
-				if (checkClientInChannel(&client, target))
+				if (target->isMember(&client))
 					target->sendToAllButOne(":" + client.getFQUN() + " PRIVMSG "
 							+ *it + " :" + message, &client);
 				else

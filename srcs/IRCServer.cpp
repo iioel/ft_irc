@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/18 21:00:06 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/19 21:39:31 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int IRCServer::run()
 			this->_send(**it);
 			if ((*it)->ping() || ((*it)->isRemoved() && (*it)->getResponse().size() == 0))
 			{
-				this->_removeClient(**it);
+				this->_removeClient(*it);
 				break;
 			}
 
@@ -170,7 +170,7 @@ int IRCServer::_recv(Client & client)
 		else if (ret == 0)
 		{
 			std::cout << "Client disconnected" << std::endl;
-			this->_removeClient(client);
+			this->_removeClient(&client);
 			return (1);
 		}
 		else
@@ -239,8 +239,8 @@ void IRCServer::_processRequest(Client & client)
 		else if (request.getPrefix() == "QUIT")
 			this->_processQuit(request, client);
 //	------------------------------------------------------------------------------
-//		else if (request.getPrefix() == "JOIN")
-//			this->_processJoin(request, client);
+		else if (request.getPrefix() == "JOIN")
+			this->_processJoin(request, client);
 		else if (request.getPrefix() == "PRIVMSG")
 			this->_processPrivmsg(request, client);
 //		else if (request.getPrefix() == "KICK")
@@ -249,8 +249,8 @@ void IRCServer::_processRequest(Client & client)
 //			this->_processInvite(request, client);
 //		else if (request.getPrefix() == "TOPIC")
 //			this->_processTopic(request, client);
-//		else if (request.getPrefix() == "MODE")
-//			this->_processMode(request, client);
+		else if (request.getPrefix() == "MODE")
+			this->_processMode(request, client);
 	}
 }
 
@@ -259,20 +259,25 @@ void IRCServer::_addClient(int fd, std::string addr)
 	this->_clients.push_back(new Client(fd, this->_allwritefds, addr));
 }
 
-void IRCServer::_removeClient(Client & client)
+void IRCServer::_removeClient(Client * client)
 {
 	std::cout << "Closing socket" << std::endl;
-	close(client.getSocket());
-	FD_CLR(client.getSocket(), &this->_allfds);
-	FD_CLR(client.getSocket(), &this->_readfds);
-	FD_CLR(client.getSocket(), &this->_writefds);
-	FD_CLR(client.getSocket(), &this->_allwritefds);
+	close(client->getSocket());
+	FD_CLR(client->getSocket(), &this->_allfds);
+	FD_CLR(client->getSocket(), &this->_readfds);
+	FD_CLR(client->getSocket(), &this->_writefds);
+	FD_CLR(client->getSocket(), &this->_allwritefds);
+	for (std::vector<Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
+	{
+		if ((*it)->isMember(client))
+			(*it)->removeMember(client);
+	}
 	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 	{
-		if ((*it)->getSocket() == client.getSocket())
+		if (**it == *client)
 		{
-			this->_clients.erase(it);
 			delete *it;
+			this->_clients.erase(it);
 			break;
 		}
 	}

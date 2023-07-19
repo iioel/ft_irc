@@ -6,15 +6,31 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/19 15:47:24 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/19 20:48:50 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
 
+Channel::Channel(std::string name) : _name(name)
+{
+	this->_password = "";
+	this->_topic = "";
+	this->_limit = 0;
+	this->_inviteFlag = false;
+	this->_topicFlag = false;
+	this->_passwordFlag = false;
+	this->_limitFlag = false;
+}
+
 Channel::Channel(std::string name, std::string password) : _name(name), _password(password)
 {
-	this->_isInviteOnly = false;
+	this->_topic = "";
+	this->_limit = 0;
+	this->_inviteFlag = false;
+	this->_topicFlag = false;
+	this->_passwordFlag = true;
+	this->_limitFlag = false;
 }
 
 Channel::~Channel()
@@ -32,7 +48,17 @@ Channel & Channel::operator=(Channel const & src)
 	if (this != &src)
 	{
 		this->_name = src._name;
-		this->_clients = src._clients;
+		this->_password = src._password;
+		this->_topic = src._topic;
+		this->_limit = src._limit;
+		this->_inviteFlag = src._inviteFlag;
+		this->_topicFlag = src._topicFlag;
+		this->_passwordFlag = src._passwordFlag;
+		this->_limitFlag = src._limitFlag;
+		this->_invited = src._invited;
+		this->_members = src._members;
+		this->_chanops = src._chanops;
+		this->_chancreators = src._chancreators;
 	}
 	return (*this);
 }
@@ -44,21 +70,107 @@ std::string Channel::getName() const
 	return (this->_name);
 }
 
-std::vector<Client *> Channel::getClients() const
+std::string Channel::getPassword() const
 {
-	return (this->_clients);
+	return (this->_password);
 }
 
-std::vector<Client *> Channel::getModerators() const {
-	return this->_moderators;
+std::string Channel::getTopic() const
+{
+	return (this->_topic);
 }
 
-std::string Channel::getPassword() const {
-	return this->_password;
+int Channel::getLimit() const
+{
+	return (this->_limit);
 }
 
-bool Channel::isChannelInviteOnly() const {
-	return this->_isInviteOnly;
+std::vector<Client *> Channel::getInvited() const
+{
+	return (this->_invited);
+}
+
+std::vector<Client *> Channel::getMembers() const
+{
+	return (this->_members);
+}
+
+std::vector<Client *> Channel::getChanops() const
+{
+	return (this->_chanops);
+}
+
+std::vector<Client *> Channel::getChancreators() const
+{
+	return (this->_chancreators);
+}
+
+bool Channel::isInvited(Client *client) const
+{
+	std::vector<Client *>::const_iterator it = this->_invited.begin();
+	while (it != this->_invited.end())
+	{
+		if (*it == client)
+			return (true);
+		it++;
+	}
+	return (false);
+}
+
+bool Channel::isMember(Client *client) const
+{
+	std::vector<Client *>::const_iterator it = this->_members.begin();
+	while (it != this->_members.end())
+	{
+		if (*it == client)
+			return (true);
+		it++;
+	}
+	return (false);
+}
+
+bool Channel::isChanop(Client *client) const
+{
+	std::vector<Client *>::const_iterator it = this->_chanops.begin();
+	while (it != this->_chanops.end())
+	{
+		if (*it == client)
+			return (true);
+		it++;
+	}
+	return (false);
+}
+
+bool Channel::isChancreator(Client *client) const
+{
+	std::vector<Client *>::const_iterator it = this->_chancreators.begin();
+	while (it != this->_chancreators.end())
+	{
+		if (*it == client)
+			return (true);
+		it++;
+	}
+	return (false);
+}
+
+bool Channel::getInviteFlag() const
+{
+	return (this->_inviteFlag);
+}
+
+bool Channel::getTopicFlag() const
+{
+	return (this->_topicFlag);
+}
+
+bool Channel::getPasswordFlag() const
+{
+	return (this->_passwordFlag);
+}
+
+bool Channel::getLimitFlag() const
+{
+	return (this->_limitFlag);
 }
 
 // Setters
@@ -68,59 +180,145 @@ void Channel::setName(std::string name)
 	this->_name = name;
 }
 
-void Channel::setClients(std::vector<Client *> clients)
+void Channel::setPassword(std::string password)
 {
-	this->_clients = clients;
-}
-
-void Channel::setModerators(std::vector<Client *> moderators) {
-	this->_moderators = moderators;
-}
-
-void Channel::setPassword(std::string password) {
 	this->_password = password;
 }
 
-void Channel::setIsChannelInviteOnly(bool isInviteOnly) {
-	this->_isInviteOnly = isInviteOnly;
+void Channel::setTopic(std::string topic)
+{
+	this->_topic = topic;
 }
 
-void Channel::addClient(Client *client) // What if the client is already in the channel
+void Channel::setLimit(int limit)
 {
-	this->_clients.push_back(client);
+	this->_limit = limit;
 }
 
-void Channel::removeClient(Client *client)
+void Channel::setInvited(std::vector<Client *> invited)
 {
-	std::vector<Client *>::iterator it = this->_clients.begin();
-	while (it != this->_clients.end())
+	this->_invited = invited;
+}
+
+void Channel::setMembers(std::vector<Client *> members)
+{
+	this->_members = members;
+}
+
+void Channel::setChanops(std::vector<Client *> chanops)
+{
+	this->_chanops = chanops;
+}
+
+void Channel::setChancreators(std::vector<Client *> chancreators)
+{
+	this->_chancreators = chancreators;
+}
+
+void Channel::setInviteFlag(bool inviteFlag)
+{
+	this->_inviteFlag = inviteFlag;
+}
+
+void Channel::setTopicFlag(bool topicFlag)
+{
+	this->_topicFlag = topicFlag;
+}
+
+void Channel::setPasswordFlag(bool passwordFlag)
+{
+	this->_passwordFlag = passwordFlag;
+}
+
+void Channel::setLimitFlag(bool limitFlag)
+{
+	this->_limitFlag = limitFlag;
+}
+
+void Channel::addInvited(Client *client)
+{
+	if (!this->isInvited(client))
+		this->_invited.push_back(client);
+}
+
+void Channel::removeInvited(Client *client)
+{
+	std::vector<Client *>::iterator it = this->_invited.begin();
+	while (it != this->_invited.end())
 	{
 		if (*it == client)
 		{
-			this->_clients.erase(it);
+			this->_invited.erase(it);
 			break ;
 		}
 		it++;
 	}
 }
 
-void Channel::addModerator(Client *moderator) { // Same as addClient
-	this->_moderators.push_back(moderator);
+void Channel::addMember(Client *client)
+{
+	if (!this->isMember(client))
+		this->_members.push_back(client);
 }
 
-void Channel::removeModerator(Client *moderator) {
-	for (std::vector<Client *>::iterator it = this->_moderators.begin(); it != this->_moderators.end() ;it++) {
-		if (*it == moderator) {
-			this->_moderators.erase(it);
-			return ;
+void Channel::removeMember(Client *client)
+{
+	std::vector<Client *>::iterator it = this->_members.begin();
+	while (it != this->_members.end())
+	{
+		if (*it == client)
+		{
+			this->_members.erase(it);
+			break ;
 		}
+		it++;
+	}
+}
+
+void Channel::addChanop(Client *client)
+{
+	if (!this->isChanop(client))
+		this->_chanops.push_back(client);
+}
+
+void Channel::removeChanop(Client *client)
+{
+	std::vector<Client *>::iterator it = this->_chanops.begin();
+	while (it != this->_chanops.end())
+	{
+		if (*it == client)
+		{
+			this->_chanops.erase(it);
+			break ;
+		}
+		it++;
+	}
+}
+
+void Channel::addChancreator(Client *client)
+{
+	if (!this->isChancreator(client))
+		this->_chancreators.push_back(client);
+}
+
+void Channel::removeChancreator(Client *client)
+{
+	std::vector<Client *>::iterator it = this->_chancreators.begin();
+	while (it != this->_chancreators.end())
+	{
+		if (*it == client)
+		{
+			this->_chancreators.erase(it);
+			break ;
+		}
+		it++;
 	}
 }
 
 void Channel::sendToAll(std::string message)
 {
-	std::vector<Client *>::iterator it = this->_clients.begin();
-	while (it != this->_clients.end())
+	std::vector<Client *>::iterator it = this->_members.begin();
+	while (it != this->_members.end())
 	{
 		(*it)->send(message);
 		it++;
@@ -129,8 +327,8 @@ void Channel::sendToAll(std::string message)
 
 void Channel::sendToAllButOne(std::string message, Client *client)
 {
-	std::vector<Client *>::iterator it = this->_clients.begin();
-	while (it != this->_clients.end())
+	std::vector<Client *>::iterator it = this->_members.begin();
+	while (it != this->_members.end())
 	{
 		if (*it != client)
 			(*it)->send(message);
@@ -148,15 +346,4 @@ Channel * checkChannelExist(std::string channelName, std::vector<Channel *> chan
 			return (*it);
 	}
 	return (NULL);
-}
-
-bool	checkClientInChannel(Client * client, Channel * channel)
-{
-	std::vector<Client *> clients = channel->getClients();
-	for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++)
-	{
-		if ((*it) == client)
-			return (true);
-	}
-	return (false);
 }
