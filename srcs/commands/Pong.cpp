@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 18:05:17 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/17 19:17:47 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 14:45:35 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,5 @@ int IRCServer::_processPong(Message & request, Client & client)
 	}
 
 	return (client.send(":" + this->_server_name + ERR_NOORIGIN + " "
-			+ client.getNickname() + " :No origin specified"));
+			+ client.getFQUN() + " :No origin specified"));
 }

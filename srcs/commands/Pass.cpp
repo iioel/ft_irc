@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 23:19:38 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/18 15:52:42 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 14:43:09 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int IRCServer::_processPass(Message & request, Client & client)
 	if (params.size() != 1)
 	{
 		client.send(":" + this->_server_name + " " + ERR_NEEDMOREPARAMS + " "
-				+ client.getNickname() + " PASS :Not enough parameters");
+				+ client.getFQUN() + " PASS :Not enough parameters");
 	}
 	else if (! client.isLogged())
 	{
@@ -29,7 +29,7 @@ int IRCServer::_processPass(Message & request, Client & client)
 	else
 	{
 		client.send(":" + this->_server_name + " " + ERR_ALREADYREGISTRED + " "
-				+ client.getNickname() + " :Unauthorized command (already registered)");
+				+ client.getFQUN() + " :Unauthorized command (already registered)");
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/07/19 20:50:54 by ycornamu         ###   ########.fr        #
+#    Updated: 2023/07/20 14:46:39 by ycornamu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,9 +62,9 @@ DEBUG_LFLAGS = -fsanitize=address
 
 all: $(NAME)
 
-leak: LFLAGS += $(DEBUG_LFLAGS)
-leak: CFLAGS += $(DEBUG_CFLAGS)
-leak: $(NAME)
+debug: LFLAGS += $(DEBUG_LFLAGS)
+debug: CFLAGS += $(DEBUG_CFLAGS)
+debug: $(NAME)
 
 $(NAME): $(_OBJS)
 	@printf "\n"

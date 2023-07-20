@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 19:07:05 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/19 17:29:47 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 14:43:31 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	IRCServer::_processPrivmsg(Message & request, Client & client)
 
 	if (params.size() == 0)
 		return (client.send(":" + this->_server_name + " " + ERR_NORECIPIENT
-					+ " " + client.getNickname() + " :No recipient given (PRIVMSG)"));
+					+ " " + client.getFQUN() + " :No recipient given (PRIVMSG)"));
 	else if (params.size() == 1)
 		return (client.send(":" + this->_server_name + " " + ERR_NOTEXTTOSEND
-					+ " " + client.getNickname() + " :No text to send"));
+					+ " " + client.getFQUN() + " :No text to send"));
 
 	message = params[1];
 	pos = params[0].find(",");
@@ -53,12 +53,12 @@ int	IRCServer::_processPrivmsg(Message & request, Client & client)
 							+ *it + " :" + message, &client);
 				else
 					client.send(":" + this->_server_name + " " + ERR_CANNOTSENDTOCHAN
-							+ " " + client.getNickname() + " " + *it
+							+ " " + client.getFQUN() + " " + *it
 							+ " :Cannot send to channel");
 			}
 			else
 				client.send(":" + this->_server_name + " " + ERR_NOSUCHCHANNEL
-						+ " " + client.getNickname() + " " + *it
+						+ " " + client.getFQUN() + " " + *it
 						+ " :No such channel");
 		}
 		else // User
@@ -74,7 +74,7 @@ int	IRCServer::_processPrivmsg(Message & request, Client & client)
 			else
 			{
 				client.send(":" + this->_server_name + " " + ERR_NOSUCHNICK + " "
-						+ client.getNickname() + " " + *it
+						+ client.getFQUN() + " " + *it
 						+ " :No such nick");
 			}
 		}

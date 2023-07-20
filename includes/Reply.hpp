@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:33:53 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/19 20:56:31 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 13:47:35 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # define RPL_WELCOME "001"
 # define RPL_CHANNELMODEIS "324"
+# define RPL_CREATIONTIME "329"
+# define RPL_TOPIC "332"
+# define RPL_NAMREPLY "353"
+# define RPL_ENDOFNAMES "366"
 
 # define ERR_NOSUCHNICK "401"
 # define ERR_NOSUCHCHANNEL "403"

@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:16:09 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/19 20:48:00 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 13:03:29 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <string>
 # include <vector>
+# include <ctime>
 # include "Client.hpp"
 
 class Channel
@@ -23,6 +24,7 @@ class Channel
 		std::string 				_name;
 		std::string					_topic;
 		std::string					_password;
+		time_t						_creationTime;
 		int							_limit;
 		bool						_inviteFlag;
 		bool						_topicFlag;
@@ -44,6 +46,8 @@ class Channel
 		std::string 			getName() const;
 		std::string				getPassword() const;
 		std::string				getTopic() const;
+		std::string				getStrCreationTime() const;
+		time_t					getCreationTime() const;
 		int						getLimit() const;
 		std::vector<Client *> 	getInvited() const;
 		std::vector<Client *> 	getMembers() const;
@@ -88,6 +92,7 @@ class Channel
 
 		void sendToAll(std::string message);
 		void sendToAllButOne(std::string message, Client *client);
+		std::string	getModes() const;
 
 };
 

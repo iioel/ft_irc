@@ -6,14 +6,15 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/19 20:48:50 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 13:05:44 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Channel.hpp"
+#include "Channel.hpp"
 
 Channel::Channel(std::string name) : _name(name)
 {
+	this->_creationTime = time(NULL);
 	this->_password = "";
 	this->_topic = "";
 	this->_limit = 0;
@@ -25,6 +26,7 @@ Channel::Channel(std::string name) : _name(name)
 
 Channel::Channel(std::string name, std::string password) : _name(name), _password(password)
 {
+	this->_creationTime = time(NULL);
 	this->_topic = "";
 	this->_limit = 0;
 	this->_inviteFlag = false;
@@ -78,6 +80,18 @@ std::string Channel::getPassword() const
 std::string Channel::getTopic() const
 {
 	return (this->_topic);
+}
+
+std::string Channel::getStrCreationTime() const
+{
+	std::stringstream ss;
+	ss << this->_creationTime;
+	return (ss.str());
+}
+
+time_t Channel::getCreationTime() const
+{
+	return (this->_creationTime);
 }
 
 int Channel::getLimit() const
@@ -334,6 +348,24 @@ void Channel::sendToAllButOne(std::string message, Client *client)
 			(*it)->send(message);
 		it++;
 	}
+}
+
+std::string	Channel::getModes() const
+{
+	std::string			modes;
+	std::string			limit;
+	std::stringstream	ss;
+	ss << this->getLimit(); ss >> limit;
+
+	modes = this->getInviteFlag() ? "i" : "";
+	modes += this->getLimitFlag() ? "l" : "";
+	modes += this->getPasswordFlag() ? "k" : "";
+	modes += this->getTopicFlag() ? "t" : "";
+	modes += this->getLimitFlag() ? " " + limit : "";
+	modes += this->getPasswordFlag() ? " " + this->getPassword() : "";
+	if (modes.size() > 0)
+		modes.insert(0, "+");
+	return (modes);
 }
 
 // Static functions

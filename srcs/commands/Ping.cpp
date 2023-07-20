@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:26:25 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/17 17:33:13 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 14:45:28 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,5 @@ int IRCServer::_processPing(Message & request, Client & client)
 		return(client.send(":" + this->_server_name + " PONG " + params[0]));
 
 	return (client.send(":" + this->_server_name + ERR_NEEDMOREPARAMS + " "
-			+ client.getNickname() + " PING :Not enough parameters"));
+			+ client.getFQUN() + " PING :Not enough parameters"));
 }

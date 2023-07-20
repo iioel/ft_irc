@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 16:09:40 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/19 19:57:20 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 14:45:13 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,6 @@
 #include "Reply.hpp"
 
 #include <cstdlib>
-
-std::string	getModes(Channel * channel)
-{
-	std::string			modes;
-	std::string			limit;
-	std::stringstream	ss;
-	ss << channel->getLimit(); ss >> limit;
-
-	modes = channel->getInviteFlag() ? "i" : "";
-	modes += channel->getLimitFlag() ? "l" : "";
-	modes += channel->getPasswordFlag() ? "k" : "";
-	modes += channel->getTopicFlag() ? "t" : "";
-	modes += channel->getLimitFlag() ? " " + limit : "";
-	modes += channel->getPasswordFlag() ? " " + channel->getPassword() : "";
-	if (modes.size() > 0)
-		modes.insert(0, "+");
-	return (modes);
-}
 
 std::string getModesDiff(Channel * channel, Channel * backup_chan)
 {
@@ -46,12 +28,36 @@ std::string getModesDiff(Channel * channel, Channel * backup_chan)
 		modes += channel->getLimitFlag() ? "+l" : "-l";
 	if (channel->getPasswordFlag() != backup_chan->getPasswordFlag())
 		modes += channel->getPasswordFlag() ? "+k" : "-k";
+	if (channel->getChanops().size() > backup_chan->getChanops().size())
+		modes += "+o";
+	else if (channel->getChanops().size() < backup_chan->getChanops().size())
+		modes += "-o";
 	if (channel->getTopicFlag() != backup_chan->getTopicFlag())
 		modes += channel->getTopicFlag() ? "+t" : "-t";
 	if (channel->getLimitFlag() != backup_chan->getLimitFlag())
 		modes += channel->getLimitFlag() ? " " + limit : "";
 	if (channel->getPasswordFlag() != backup_chan->getPasswordFlag())
 		modes += channel->getPasswordFlag() ? " " + channel->getPassword() : "";
+	if (channel->getChanops().size() > backup_chan->getChanops().size())
+	{
+		std::vector<Client *>	chanops = channel->getChanops();
+		for (std::vector<Client *>::iterator it = chanops.begin();
+				it != chanops.end(); it++)
+		{
+			if (! backup_chan->isChanop(*it))
+				modes += " " + (*it)->getNickname();
+		}
+	}
+	else if (channel->getChanops().size() < backup_chan->getChanops().size())
+	{
+		std::vector<Client *>	chanops = backup_chan->getChanops();
+		for (std::vector<Client *>::iterator it = chanops.begin();
+				it != chanops.end(); it++)
+		{
+			if (! channel->isChanop(*it))
+				modes += " " + (*it)->getNickname();
+		}
+	}
 
 	return (modes);
 }
@@ -67,7 +73,7 @@ int IRCServer::_processMode(Message & message, Client & client)
 
 	if (params.size() < 1)
 		return (client.send(":" + this->_server_name + " " + ERR_NEEDMOREPARAMS + " "
-				+ client.getNickname() + " MODE :Not enough parameters"));
+				+ client.getFQUN() + " MODE :Not enough parameters"));
 
 	target = params[0];
 	if (target[0] == '#')
@@ -77,23 +83,23 @@ int IRCServer::_processMode(Message & message, Client & client)
 		if (! channel)
 		{
 			return (client.send(":" + this->_server_name + " " + ERR_NOSUCHCHANNEL + " "
-					+ client.getNickname() + " " + target + " :No such channel"));
+					+ client.getFQUN() + " " + target + " :No such channel"));
 		}
 		else if (! channel->isMember(&client))
 		{
 			return (client.send(":" + this->_server_name + " " + ERR_NOTONCHANNEL + " "
-					+ client.getNickname() + " " + target
+					+ client.getFQUN() + " " + target
 					+ " :You're not on that channel"));
 		}
 		else if (params.size() == 1)
 		{
 			return (client.send(":" + this->_server_name + " " + RPL_CHANNELMODEIS + " "
-					+ client.getNickname() + " " + target + " " + getModes(channel)));
+					+ client.getFQUN() + " " + target + " " + channel->getModes()));
 		}
 		else if (! channel->isChanop(&client) && ! channel->isChancreator(&client))
 		{
 			return (client.send(":" + this->_server_name + " " + ERR_CHANOPRIVSNEEDED
-					+ " " + client.getNickname() + " " + target
+					+ " " + client.getFQUN() + " " + target
 					+ " :You're not channel operator"));
 		}
 		else
@@ -110,17 +116,18 @@ int IRCServer::_processMode(Message & message, Client & client)
 					channel->setInviteFlag(sign);
 				else if (*it == 'l')
 				{
-					if (sign && param_pos < params.size())
+					if ( sign && param_pos < params.size())
 					{
 						if (params[param_pos].find_first_not_of("0123456789") == std::string::npos)
 						{
 							channel->setLimitFlag(sign);
-							channel->setLimit(std::atoi(params[param_pos].c_str()));
+							if (sign)
+								channel->setLimit(std::atoi(params[param_pos].c_str()));
 						}
 						else
 						{
 							client.send(":" + this->_server_name + " "
-									+ ERR_INVALIDMODEPARAM + " " + client.getNickname()
+									+ ERR_INVALIDMODEPARAM + " " + client.getFQUN()
 									+ " " + channel->getName() + " " + *it + " "
 									+ params[param_pos]
 									+ " :Invalid parameter, should be a number");
@@ -130,23 +137,28 @@ int IRCServer::_processMode(Message & message, Client & client)
 					else if (sign)
 					{
 						client.send(":" + this->_server_name + " "
-								+ ERR_NEEDMOREPARAMS + " " + client.getNickname()
+								+ ERR_NEEDMOREPARAMS + " " + client.getFQUN()
 								+ " MODE :Not enough parameters");
 					}
+					else
+						channel->setLimitFlag(sign);
 				}
 				else if (*it == 'k')
 				{
 					if (sign && param_pos < params.size())
 					{
 						channel->setPasswordFlag(sign);
-						channel->setPassword(params[param_pos++]);
+						if (sign)
+							channel->setPassword(params[param_pos++]);
 					}
 					else if (sign)
 					{
 						client.send(":" + this->_server_name + " "
-								+ ERR_NEEDMOREPARAMS + " " + client.getNickname()
+								+ ERR_NEEDMOREPARAMS + " " + client.getFQUN()
 								+ " MODE :Not enough parameters");
 					}
+					else
+						channel->setPasswordFlag(sign);
 				}
 				else if (*it == 't')
 					channel->setTopicFlag(sign);
@@ -169,7 +181,7 @@ int IRCServer::_processMode(Message & message, Client & client)
 							{
 								client.send(":" + this->_server_name
 										+ " " + ERR_USERNOTINCHANNEL + " "
-										+ client.getNickname() + " "
+										+ client.getFQUN() + " "
 										+ params[param_pos] + " " + target
 										+ " :They aren't on that channel");
 							}
@@ -177,7 +189,7 @@ int IRCServer::_processMode(Message & message, Client & client)
 						else
 						{
 							client.send(":" + this->_server_name + " "
-									+ ERR_NOSUCHNICK + " " + client.getNickname()
+									+ ERR_NOSUCHNICK + " " + client.getFQUN()
 									+ " " + params[param_pos] + " :No such nick");
 						}
 						param_pos++;
@@ -185,19 +197,21 @@ int IRCServer::_processMode(Message & message, Client & client)
 					else
 					{
 						client.send(":" + this->_server_name + " "
-								+ ERR_NEEDMOREPARAMS + " " + client.getNickname()
+								+ ERR_NEEDMOREPARAMS + " " + client.getFQUN()
 								+ " MODE :Not enough parameters");
 					}
 				}
 				else
 				{
 					client.send(":" + this->_server_name + " "
-							+ ERR_UNKNOWNMODE + " " + client.getNickname() + " "
+							+ ERR_UNKNOWNMODE + " " + client.getFQUN() + " "
 							+ *it + " :is unknown mode char to me for " + target);
 				}
 			}
-			client.send(":" + client.getNickname() + " MODE " + target + " "
+			client.send(":" + client.getFQUN() + " MODE " + target + " "
 					+ getModesDiff(channel, &backup_chan));
+			//channel->sendToAll(":" + this->_server_name + " " + RPL_CHANNELMODEIS + " "
+			//		+ client.getFQUN() + " " + target + " " + channel->getModes());
 		}
 	}
 	else
@@ -214,7 +228,7 @@ int IRCServer::_processMode(Message & message, Client & client)
 		else
 		{
 			return (client.send(":" + this->_server_name + " " + ERR_NOSUCHNICK + " "
-					+ client.getNickname() + " " + target + " :No such nick"));
+					+ client.getFQUN() + " " + target + " :No such nick"));
 		}
 	}
 	return (0);

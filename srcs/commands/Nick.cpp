@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:19:54 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/18 19:47:39 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 14:50:05 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	IRCServer::_processNick(Message & request, Client & client)
 		}
 		else
 		{
-			std::string old_nickname = client.getFQUN();
+			std::string old_nickname = client.getNickname();
 			client.setNickname(params[0]);
 			this->_sendToAll(":" + old_nickname + " NICK " + client.getNickname());
 		}
