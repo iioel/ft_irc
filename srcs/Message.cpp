@@ -6,12 +6,13 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 16:55:38 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 19:03:54 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 16:58:35 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Message.hpp"
 #include <sstream>
+#include <algorithm>
 
 Message::Message() : _message(""), _prefix(""), _params(0)
 {

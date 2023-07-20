@@ -6,13 +6,14 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/20 15:35:30 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 16:57:56 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string>
 #include <iostream>
 #include <sys/select.h>
+#include <cstdlib>
 
 #include "Client.hpp"
 

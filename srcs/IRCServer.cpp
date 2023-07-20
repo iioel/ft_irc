@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/20 16:09:43 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 16:56:14 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,13 +191,13 @@ int IRCServer::_send(Client & client)
 		std::string buffer = client.getResponse();
 		if (buffer.size() > 0)
 		{
-			size_t ret = send(client.getSocket(), buffer.c_str(), buffer.size(), 0);
+			int ret = send(client.getSocket(), buffer.c_str(), buffer.size(), 0);
 			if (ret < 0)
 			{
 				std::cout << "Error" << std::endl;
 				return 1;
 			}
-			else if (ret < buffer.size())
+			else if (ret < static_cast<int>(buffer.size()))
 				client.setResponse(buffer.substr(ret));
 			else
 			{
