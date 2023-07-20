@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:16:09 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/20 13:03:29 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/21 11:47:02 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class Channel
 		~Channel();
 		Channel(Channel const & src);
 		Channel & operator=(Channel const & src);
+		bool	operator==(Channel const & src) const;
 
 		// Getters
 		std::string 			getName() const;

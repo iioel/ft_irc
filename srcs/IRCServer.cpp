@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/20 16:09:43 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/21 11:52:38 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int IRCServer::_initSocket()
 	this->_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->_socket < 0)
 	{
-		std::cout << "Error" << std::endl;
+		std::cout << "Error opening socket..." << std::endl;
 		return 1;
 	}
 	std::cout << "OK" << std::endl;
@@ -93,7 +93,7 @@ int IRCServer::_initSocket()
 	addr.sin_port = htons(this->_port);
 	if (bind(this->_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0)
 	{
-		std::cout << "Error" << std::endl;
+		std::cout << "Error binding socket..." << std::endl;
 		return 1;
 	}
 	std::cout << "OK" << std::endl;
@@ -101,7 +101,7 @@ int IRCServer::_initSocket()
 	std::cout << "Listening socket... ";
 	if (listen(this->_socket, 32) < 0)
 	{
-		std::cout << "Error" << std::endl;
+		std::cout << "Error listening socket..." << std::endl;
 		return 1;
 	}
 	std::cout << "OK" << std::endl;
@@ -139,7 +139,7 @@ int IRCServer::_accept()
 		int client = accept(this->_socket, &addr, &addrlen);
 		if (client < 0)
 		{
-			std::cout << "Error" << std::endl;
+			std::cout << "Error accepting connection..." << std::endl;
 			return 1;
 		}
 		else
@@ -164,7 +164,7 @@ int IRCServer::_recv(Client & client)
 		int ret = recv(client.getSocket(), buffer, 1023, 0);
 		if (ret < 0)
 		{
-			std::cout << "Error" << std::endl;
+			std::cout << "Error reciving..." << std::endl;
 			return 1;
 		}
 		else if (ret == 0)
@@ -191,13 +191,13 @@ int IRCServer::_send(Client & client)
 		std::string buffer = client.getResponse();
 		if (buffer.size() > 0)
 		{
-			size_t ret = send(client.getSocket(), buffer.c_str(), buffer.size(), 0);
+			int ret = send(client.getSocket(), buffer.c_str(), buffer.size(), 0);
 			if (ret < 0)
 			{
-				std::cout << "Error" << std::endl;
+				std::cout << "Error sending..." << std::endl;
 				return 1;
 			}
-			else if (ret < buffer.size())
+			else if (ret < static_cast<int>(buffer.size()))
 				client.setResponse(buffer.substr(ret));
 			else
 			{
@@ -249,6 +249,8 @@ void IRCServer::_processRequest(Client & client)
 //			this->_processInvite(request, client);
 //		else if (request.getPrefix() == "TOPIC")
 //			this->_processTopic(request, client);
+		else if (request.getPrefix() == "PART")
+			this->_processPart(request, client);
 		else if (request.getPrefix() == "MODE")
 			this->_processMode(request, client);
 	}
@@ -283,6 +285,19 @@ void IRCServer::_removeClient(Client * client)
 	}
 }
 
+void IRCServer::_removeChannel(Channel * channel)
+{
+	for (std::vector<Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
+	{
+		if (**it == *channel)
+		{
+			delete *it;
+			this->_channels.erase(it);
+			break;
+		}
+	}
+
+}
 
 void IRCServer::_sendToAll(std::string message)
 {

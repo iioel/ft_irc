@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/20 13:05:44 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/21 11:47:52 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ Channel & Channel::operator=(Channel const & src)
 		this->_chancreators = src._chancreators;
 	}
 	return (*this);
+}
+
+bool	Channel::operator==(Channel const & src) const
+{
+	return (this->_name == src._name);
 }
 
 // Getters

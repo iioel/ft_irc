@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:42:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/07/20 14:39:54 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/21 12:17:52 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	IRCServer::_processJoin(Message & request, Client & client) {
 			params[0].erase(0, pos + 1);
 			pos = params[0].find(",");
 		}
+		targets.push_back(params[0]);
 	}
 
 	// Parse passwords
@@ -52,6 +53,7 @@ int	IRCServer::_processJoin(Message & request, Client & client) {
 				params[1].erase(0, pos + 1);
 				pos = params[1].find(",");
 			}
+			passwords.push_back(params[1]);
 		}
 	}
 
@@ -63,8 +65,11 @@ int	IRCServer::_processJoin(Message & request, Client & client) {
 
 		if (channel_name[0] != '#' // Check channel name
 				|| channel_name.find_first_of(",: \n\r") != std::string::npos)
-			return (client.send(":" + _server_name + " " + ERR_BADCHANMASK + " "
-					+ client.getFQUN() + " " + params[0] + " :Bad Channel Mask"));
+		{
+			client.send(":" + _server_name + " " + ERR_BADCHANMASK + " "
+					+ client.getFQUN() + " " + params[0] + " :Bad Channel Mask");
+			continue ;
+		}
 
 		Channel *channel = checkChannelExist(channel_name, this->_channels);
 		if (channel == NULL)
@@ -80,20 +85,32 @@ int	IRCServer::_processJoin(Message & request, Client & client) {
 		}
 		else if (channel->getPasswordFlag() // Password protected channel
 				&& (it2 == passwords.end() || channel->getPassword() != *it2))
-			return (client.send(":" + _server_name + " " + ERR_BADCHANNELKEY
-					+ client.getFQUN() + " " + params[0] + " :Wrong Channel Key"));
+		{
+			client.send(":" + _server_name + " " + ERR_BADCHANNELKEY
+					+ client.getFQUN() + " " + params[0] + " :Wrong Channel Key");
+			continue ;
+		}
 		else if (channel->getLimitFlag() // Channel limit reached
 				&& static_cast<size_t>(channel->getLimit()) <= channel->getMembers().size())
-			return (client.send(":" + _server_name + " " + ERR_CHANNELISFULL + " "
-					+ client.getFQUN() + " " + params[0] + " :Channel is full"));
+		{
+			client.send(":" + _server_name + " " + ERR_CHANNELISFULL + " "
+					+ client.getFQUN() + " " + params[0] + " :Channel is full");
+			continue ;
+		}
 		else if (channel->isMember(&client)) // Already on channel
-			return (client.send(":" + _server_name + " " + ERR_USERONCHANNEL + " "
+		{
+			client.send(":" + _server_name + " " + ERR_USERONCHANNEL + " "
 					+ client.getFQUN() + " " + params[0]
-					+ " :You are already on that channel"));
+					+ " :You are already on that channel");
+			continue ;
+		}
 		else if (channel->getInviteFlag() && !channel->isInvited(&client)) // Invite only
-			return (client.send(":" + _server_name + " " + ERR_INVITEONLYCHAN + " "
+		{
+			client.send(":" + _server_name + " " + ERR_INVITEONLYCHAN + " "
 					+ client.getFQUN() + " " + params[0]
-					+ " :Cannot join channel (+i)"));
+					+ " :Cannot join channel (+i)");
+			continue ;
+		}
 		else
 			channel->addMember(&client);
 		channel->sendToAll(":" + client.getFQUN() + " JOIN " + channel_name);
