@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/19 21:25:41 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 16:00:50 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <ctime>
 
 # include "perror.hpp"
 # include "Client.hpp"
@@ -51,8 +52,8 @@ class IRCServer
 		fd_set 	_readfds;
 		fd_set 	_allwritefds;
 		fd_set 	_writefds;
+		time_t 	_creation_time;
 		std::string 				_server_name;
-		std::string 				_motd;
 		std::string 				_password;
 		std::vector<Client *> 		_clients;
 		std::vector<Channel *> 		_channels;
@@ -69,6 +70,8 @@ class IRCServer
 		void		_processRequest(Client & client);
 		void		_sendToAll(std::string message);
 		void 		_sendToAllButOne(std::string message, Client & client);
+		void		_sendWelcome(Client & client);
+		void		_sendMOTD(Client & client);
 
 
 		int	_processCap(Message & request, Client & client);

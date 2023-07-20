@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/19 21:39:31 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 16:09:43 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int IRCServer::init(int port, std::string const & password)
 	this->_port = port;
 	this->_password = password;
 	this->_server_name = "server.42.fr";
-	this->_motd = "Welcome to the IRC server";
+	this->_creation_time = time(NULL);
 	this->_initSocket();
 	this->_initFdSets();
 	return 0;
@@ -303,4 +303,57 @@ void IRCServer::_sendToAllButOne(std::string message, Client & client)
 			(*it)->send(message);
 		it++;
 	}
+}
+
+void IRCServer::_sendWelcome(Client & client)
+{
+	client.send(":" + this->_server_name + " " + RPL_WELCOME + " "
+			+ client.getNickname() + " :Welcome to the Internet Relay Network "
+			+ client.getFQUN());
+	client.send(":" + this->_server_name + " " + RPL_YOURHOST + " "
+			+ client.getNickname() + " :Your host is " + this->_server_name
+			+ ", running version 1.0");
+	client.send(":" + this->_server_name + " " + RPL_CREATED + " "
+			+ client.getNickname() + " :This server was created "
+			+ ctime(&this->_creation_time));
+	//client.send(":" + this->_server_name + " " + RPL_MYINFO + " "
+	//		+ client.getNickname() + " 1.0  i itkol");
+	this->_sendMOTD(client);
+}
+
+void IRCServer::_sendMOTD(Client & client)
+{
+	client.send(":" + this->_server_name + " " + RPL_MOTDSTART + " "
+			+ client.getFQUN()
+			+ " :-                  Message of the day                   -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-                                                       -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :- Welcome to our ft_irc server made @42Lausanne !       -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-                                                       -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-         :::      ::::::::                             -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-       :+:      :+:    :+:                             -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-     +:+ +:+         +:+                               -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-   +#+  +:+       +#+                                  -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :- +#+#+#+#+#+   +#+                                     -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-      #+#    #+#                                       -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-     ###   ########lausanne.ch                         -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-                                                       -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :- Enjoy using this server !                             -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-                                                       -");
+	client.send(":" + this->_server_name + " " + RPL_MOTD + " " + client.getFQUN()
+			+ " :-                       Your hosts: lduboulo & ycornamu -");
+	client.send(":" + this->_server_name + " " + RPL_ENDOFMOTD + " "
+			+ client.getFQUN() + " :End of MOTD command");
 }

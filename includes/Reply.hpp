@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:33:53 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/20 13:47:35 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 16:02:25 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 # define Reply_HPP
 
 # define RPL_WELCOME "001"
+# define RPL_YOURHOST "002"
+# define RPL_CREATED "003"
+# define RPL_MYINFO "004"
+# define RPL_MOTDSTART "375"
+# define RPL_MOTD "372"
+# define RPL_ENDOFMOTD "376"
 # define RPL_CHANNELMODEIS "324"
 # define RPL_CREATIONTIME "329"
 # define RPL_TOPIC "332"

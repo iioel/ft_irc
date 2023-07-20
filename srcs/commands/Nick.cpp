@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:19:54 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/20 14:50:05 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 16:03:57 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ int	IRCServer::_processNick(Message & request, Client & client)
 	{
 		client.send(":" + this->_server_name + " " + ERR_PASSWDMISMATCH + " "
 				+ client.getNickname() + " :Password incorrect");
-		client.send("ERROR :Closing Link: " + client.getNickname()
-				+ " (Bad password)");
+		client.send(":" + this->_server_name + " ERROR :Closing Link: "
+				+ client.getNickname() + " (Bad password)");
 		client.remove();
 		return (1);
 	}
@@ -56,12 +56,10 @@ int	IRCServer::_processNick(Message & request, Client & client)
 		{
 			client.setNickname(params[0]);
 			client.send(":" + this->_server_name + " NICK " + client.getNickname());
-			if (client.getUsername() != "" && ! client.isRegistered())
+			if (client.getUsername() != "*" && ! client.isRegistered())
 			{
 				client.setRegistered(true);
-				client.send(":" + this->_server_name + " " + RPL_WELCOME + " "
-					+ client.getNickname() + " :Welcome to the Internet Relay Network "
-					+ client.getFQUN());
+				this->_sendWelcome(client);
 			}
 		}
 		else

@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/19 15:44:58 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 15:35:30 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ Client::Client(int fd, fd_set & allwritefds, std::string hostname): _allwritefds
 	this->_isRemoved = false;
 	this->_isPong = true;
 	this->_nickname = "*";
-	this->_username = "";
+	this->_username = "*";
 	this->_realname = "";
 	this->_hostname = hostname;
 	this->_request = "";

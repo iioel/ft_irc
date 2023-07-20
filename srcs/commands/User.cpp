@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:09:38 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/20 14:50:44 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/20 16:04:11 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int IRCServer::_processUser(Message & request, Client & client)
 	{
 		client.send(":" + this->_server_name + " " + ERR_PASSWDMISMATCH + " "
 				+ client.getNickname() + " :Password incorrect");
-		client.send("ERROR :Closing Link: " + client.getNickname()
-				+ " (Bad password)");
+		client.send(":" + this->_server_name + " ERROR :Closing Link: "
+				+ client.getNickname() + " (Bad password)");
 		client.remove();
 		return (1);
 	}
@@ -35,9 +35,7 @@ int IRCServer::_processUser(Message & request, Client & client)
 		if (client.getNickname() != "*" && ! client.isRegistered())
 		{
 			client.setRegistered(true);
-			client.send(":" + this->_server_name + " " + RPL_WELCOME + " "
-				+ client.getNickname() + " :Welcome to the Internet Relay Network "
-				+ client.getFQUN());
+			this->_sendWelcome(client);
 		}
 	}
 	else
