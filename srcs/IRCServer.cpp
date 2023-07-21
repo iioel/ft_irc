@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/21 11:52:38 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/21 15:54:04 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,10 +270,7 @@ void IRCServer::_removeClient(Client * client)
 	FD_CLR(client->getSocket(), &this->_writefds);
 	FD_CLR(client->getSocket(), &this->_allwritefds);
 	for (std::vector<Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
-	{
-		if ((*it)->isMember(client))
-			(*it)->removeMember(client);
-	}
+		(*it)->removeMember(client);
 	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 	{
 		if (**it == *client)

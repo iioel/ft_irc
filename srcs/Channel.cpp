@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/21 11:47:52 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/21 15:55:40 by yoel             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,14 +263,17 @@ void Channel::addInvited(Client *client)
 void Channel::removeInvited(Client *client)
 {
 	std::vector<Client *>::iterator it = this->_invited.begin();
-	while (it != this->_invited.end())
+	if (this->isInvited(client))
 	{
-		if (*it == client)
+		while (it != this->_invited.end())
 		{
-			this->_invited.erase(it);
-			break ;
+			if (*it == client)
+			{
+				this->_invited.erase(it);
+				break ;
+			}
+			it++;
 		}
-		it++;
 	}
 }
 
@@ -283,15 +286,21 @@ void Channel::addMember(Client *client)
 void Channel::removeMember(Client *client)
 {
 	std::vector<Client *>::iterator it = this->_members.begin();
-	while (it != this->_members.end())
+	if (this->isMember(client))
 	{
-		if (*it == client)
+		while (it != this->_members.end())
 		{
-			this->_members.erase(it);
-			break ;
+			if (*it == client)
+			{
+				this->_members.erase(it);
+				break ;
+			}
+			it++;
 		}
-		it++;
 	}
+	this->removeInvited(client);
+	this->removeChanop(client);
+	this->removeChancreator(client);
 }
 
 void Channel::addChanop(Client *client)
@@ -303,14 +312,17 @@ void Channel::addChanop(Client *client)
 void Channel::removeChanop(Client *client)
 {
 	std::vector<Client *>::iterator it = this->_chanops.begin();
-	while (it != this->_chanops.end())
+	if (this->isChanop(client))
 	{
-		if (*it == client)
+		while (it != this->_chanops.end())
 		{
-			this->_chanops.erase(it);
-			break ;
+			if (*it == client)
+			{
+				this->_chanops.erase(it);
+				break ;
+			}
+			it++;
 		}
-		it++;
 	}
 }
 
@@ -323,14 +335,17 @@ void Channel::addChancreator(Client *client)
 void Channel::removeChancreator(Client *client)
 {
 	std::vector<Client *>::iterator it = this->_chancreators.begin();
-	while (it != this->_chancreators.end())
+	if (this->isChancreator(client))
 	{
-		if (*it == client)
+		while (it != this->_chancreators.end())
 		{
-			this->_chancreators.erase(it);
-			break ;
+			if (*it == client)
+			{
+				this->_chancreators.erase(it);
+				break ;
+			}
+			it++;
 		}
-		it++;
 	}
 }
 
