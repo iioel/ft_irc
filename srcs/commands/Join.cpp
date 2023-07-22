@@ -6,12 +6,12 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:42:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/07/21 12:17:52 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/22 15:18:21 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCServer.hpp"
-#include "Reply.hpp"
+#include "../../includes/IRCServer.hpp"
+#include "../../includes/Reply.hpp"
 
 int	IRCServer::_processJoin(Message & request, Client & client) {
 

@@ -6,15 +6,15 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/21 15:54:04 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/22 15:41:51 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sstream>
 
-#include "IRCServer.hpp"
-#include "Message.hpp"
-#include "Reply.hpp"
+#include "../includes/IRCServer.hpp"
+#include "../includes/Message.hpp"
+#include "../includes/Reply.hpp"
 
 IRCServer::IRCServer()
 {
@@ -294,6 +294,16 @@ void IRCServer::_removeChannel(Channel * channel)
 		}
 	}
 
+}
+
+Channel	*IRCServer::_getChannelFromName(std::string name) {
+	for (std::vector<Channel *>::iterator it = this->_channels.begin(); 
+			it != this->_channels.end(); it++) {
+		if ((*it)->getName() == name) {
+			return (*it);
+		}
+	}
+	return (NULL);
 }
 
 void IRCServer::_sendToAll(std::string message)

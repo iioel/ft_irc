@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/20 16:57:56 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/22 15:23:15 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <sys/select.h>
 #include <cstdlib>
 
-#include "Client.hpp"
+#include "../includes/Client.hpp"
 
 Client::Client(int fd, fd_set & allwritefds, std::string hostname): _allwritefds(allwritefds)
 {

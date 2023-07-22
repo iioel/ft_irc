@@ -6,13 +6,13 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:24:46 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/17 17:37:04 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/22 13:03:38 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <cstdlib>
-#include "IRCServer.hpp"
+#include "../includes/IRCServer.hpp"
 
 int main(int argc, char **argv)
 {
