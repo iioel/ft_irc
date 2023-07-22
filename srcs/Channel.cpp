@@ -6,11 +6,11 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/21 15:55:40 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/22 16:45:21 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
+#include "../includes/Channel.hpp"
 
 Channel::Channel(std::string name) : _name(name)
 {
@@ -190,6 +190,16 @@ bool Channel::getPasswordFlag() const
 bool Channel::getLimitFlag() const
 {
 	return (this->_limitFlag);
+}
+
+Client	*Channel::getMemberFromName(std::string username) {
+	for (std::vector<Client *>::iterator it = this->_members.begin();
+			it != this->_members.end(); it++) {
+		if (username == (*it)->getUsername()) {
+			return (*it);
+		}
+	}
+	return (NULL);
 }
 
 // Setters

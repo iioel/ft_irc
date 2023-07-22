@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:16:09 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/21 11:47:02 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/22 16:46:05 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ class Channel
 		bool 					getTopicFlag() const;
 		bool 					getPasswordFlag() const;
 		bool 					getLimitFlag() const;
+
+		Client*					getMemberFromName(std::string username);
 
 		// Setters
 		void setName(std::string name);
