@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 19:07:05 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/20 14:43:31 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/23 14:43:58 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	IRCServer::_processPrivmsg(Message & request, Client & client)
 			params[0].erase(0, pos + 1);
 			pos = params[0].find(",");
 		}
+		targets.push_back(params[0]);
 	}
 
 	for (std::vector<std::string>::iterator it = targets.begin(); it != targets.end(); it++)
