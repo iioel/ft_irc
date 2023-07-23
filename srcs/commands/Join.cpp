@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:42:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/07/23 19:16:31 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/23 20:01:19 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,10 @@ int	IRCServer::_processJoin(Message & request, Client & client) {
 		for (std::vector<Client *>::iterator it3 = members.begin(); it3 != members.end(); it3++)
 		{
 			std::string rank;
-			if (channel->isChanop(*it3))
-				rank = "@";
-			else if (channel->isChancreator(*it3))
+			if (channel->isChancreator(*it3))
 				rank = "~";
+			else if (channel->isChanop(*it3))
+				rank = "@";
 			client.send(":" + this->_server_name + " " + RPL_NAMREPLY + " "
 						+ client.getFQUN() + " = " + channel_name + " :"
 						+ rank + (*it3)->getFQUN());

@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:33:53 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/23 19:03:46 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/23 19:54:07 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 # define RPL_YOURHOST "002"
 # define RPL_CREATED "003"
 # define RPL_MYINFO "004"
+# define RPL_WHOISUSER "311"
+# define RPL_WHOISSERVER "312"
+# define RPL_WHOISCHANNELS "319"
+# define RPL_WHOISACTUALLY "338"
+# define RPL_ENDOFWHOIS "318"
 # define RPL_WHOREPLY "352"
 # define RPL_ENDOFWHO "315"
 # define RPL_MOTDSTART "375"
