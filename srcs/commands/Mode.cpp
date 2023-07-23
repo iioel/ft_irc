@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 16:09:40 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/23 16:46:21 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/23 19:19:14 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,13 +203,16 @@ int IRCServer::_processMode(Message & message, Client & client)
 				}
 				else
 				{
-					client.send(":" + this->_server_name + " "
+					return (client.send(":" + this->_server_name + " "
 							+ ERR_UNKNOWNMODE + " " + client.getFQUN() + " "
-							+ *it + " :is unknown mode char to me for " + target);
+							+ *it + " :is unknown mode char to me for " + target));
 				}
 			}
-			channel->sendToAll(":" + client.getFQUN() + " MODE " + target + " "
+			client.send(":" + client.getFQUN() + " MODE " + target + " "
 					+ getModesDiff(channel, &backup_chan));
+			if (getModesDiff(channel, &backup_chan) != "")
+				channel->sendToAllButOne(":" + client.getFQUN() + " MODE " + target + " "
+						+ getModesDiff(channel, &backup_chan), &client);
 		}
 	}
 	else
