@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/21 15:54:04 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/23 18:07:22 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ int IRCServer::run()
 		for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 		{
 			if (this->_recv(**it))
-				break;
+				continue;
 			this->_send(**it);
-			if ((*it)->ping() || ((*it)->isRemoved() && (*it)->getResponse().size() == 0))
-			{
-				this->_removeClient(*it);
-				break;
-			}
+		}
 
+		for (size_t i = 0; i < this->_clients.size(); ++i)
+		{
+			if ((this->_clients[i]->isRemoved() && ! this->_clients[i]->getResponse().size()) || this->_clients[i]->ping())
+				this->_removeClient(this->_clients[i--]);
 		}
 	}
 }
@@ -170,8 +170,8 @@ int IRCServer::_recv(Client & client)
 		else if (ret == 0)
 		{
 			std::cout << "Client disconnected" << std::endl;
-			this->_removeClient(&client);
-			return (1);
+			client.remove();
+			return 1;
 		}
 		else
 		{
@@ -187,7 +187,6 @@ int IRCServer::_send(Client & client)
 {
 	if (FD_ISSET(client.getSocket(), &this->_writefds))
 	{
-		std::cout << "Sending" << std::endl;
 		std::string buffer = client.getResponse();
 		if (buffer.size() > 0)
 		{
