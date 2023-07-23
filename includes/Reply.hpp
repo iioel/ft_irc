@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:33:53 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/20 16:02:25 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/23 19:03:46 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # define RPL_YOURHOST "002"
 # define RPL_CREATED "003"
 # define RPL_MYINFO "004"
+# define RPL_WHOREPLY "352"
+# define RPL_ENDOFWHO "315"
 # define RPL_MOTDSTART "375"
 # define RPL_MOTD "372"
 # define RPL_ENDOFMOTD "376"
@@ -27,6 +29,7 @@
 # define RPL_ENDOFNAMES "366"
 
 # define ERR_NOSUCHNICK "401"
+# define ERR_NOSUCHSERVER "402"
 # define ERR_NOSUCHCHANNEL "403"
 # define ERR_CANNOTSENDTOCHAN "404"
 # define ERR_NOORIGIN "409"

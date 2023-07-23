@@ -6,7 +6,7 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/07/21 11:32:47 by yoel             ###   ########.fr        #
+#    Updated: 2023/07/23 19:01:24 by ycornamu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,8 @@ SRCS 		= main.cpp \
 			  commands/Privmsg.cpp \
 			  commands/Mode.cpp \
 			  commands/Join.cpp \
-			  commands/Part.cpp
+			  commands/Part.cpp \
+			  commands/Who.cpp
 
 SRCS_DIR	= srcs
 

@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/23 18:07:22 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/23 19:01:04 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,8 @@ void IRCServer::_processRequest(Client & client)
 			this->_processPart(request, client);
 		else if (request.getPrefix() == "MODE")
 			this->_processMode(request, client);
+		else if (request.getPrefix() == "WHO")
+			this->_processWho(request, client);
 	}
 }
 

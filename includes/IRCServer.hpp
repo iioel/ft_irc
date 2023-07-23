@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/21 11:43:41 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/23 18:46:00 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ class IRCServer
 //		int	_processTopic(Message & request, Client & client);
 		int _processPart(Message & request, Client & client);
 		int	_processMode(Message & request, Client & client);
+		int	_processWho(Message & request, Client & client);
 };
 
 #endif
