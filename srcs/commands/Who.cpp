@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 18:47:49 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/24 11:18:30 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/24 12:27:07 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int IRCServer::_processWho(Message & request, Client & client)
 	if (params.size() == 0)
 	{
 		client.send(":" + this->_server_name + " " + ERR_NEEDMOREPARAMS + " "
-			+ client.getNickname() + " WHO :Not enough parameters");
+			+ client.getFQUN() + " WHO :Not enough parameters");
 		return (0);
 	}
 
@@ -42,18 +42,18 @@ int IRCServer::_processWho(Message & request, Client & client)
 					+ rank + " :0 " + (*it)->getRealname());
 			}
 			client.send(":" + this->_server_name + " " + RPL_ENDOFWHO + " "
-				+ client.getNickname() + " " + channel->getName() + " :End of WHO list");
+				+ client.getFQUN() + " " + channel->getName() + " :End of WHO list");
 		}
 		else
 		{
 			client.send(":" + this->_server_name + " " + ERR_NOSUCHCHANNEL + " "
-				+ client.getNickname() + " " + mask + " :No such channel");
+				+ client.getFQUN() + " " + mask + " :No such channel");
 		}
 	}
 	else if (mask.find(".") != std::string::npos)
 	{
 		client.send(":" + this->_server_name + " " + ERR_NOSUCHSERVER + " "
-			+ client.getNickname() + " " + mask + " :No such server");
+			+ client.getFQUN() + " " + mask + " :No such server");
 	}
 	else
 	{
@@ -65,12 +65,12 @@ int IRCServer::_processWho(Message & request, Client & client)
 				+ target->getHostname() + " " + this->_server_name + " "
 				+ target->getNickname() + " H :0 " + target->getRealname());
 			client.send(":" + this->_server_name + " " + RPL_ENDOFWHO + " "
-				+ client.getNickname() + " " + target->getNickname() + " :End of WHO list");
+				+ client.getFQUN() + " " + target->getNickname() + " :End of WHO list");
 		}
 		else
 		{
 			client.send(":" + this->_server_name + " " + ERR_NOSUCHNICK + " "
-				+ client.getNickname() + " " + mask + " :No such nick/channel");
+				+ client.getFQUN() + " " + mask + " :No such nick/channel");
 		}
 	}
 	return (0);

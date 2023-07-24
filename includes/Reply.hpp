@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:33:53 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/24 12:05:46 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/24 12:24:33 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 # define ERR_NOORIGIN "409"
 # define ERR_NORECIPIENT "411"
 # define ERR_NOTEXTTOSEND "412"
+# define ERR_UNKNOWNCOMMAND "421"
 # define ERR_NONICKNAMEGIVEN "431"
 # define ERR_ERRONEUSNICKNAME "432"
 # define ERR_NICKNAMEINUSE "433"

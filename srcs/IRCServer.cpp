@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/24 12:00:17 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/24 12:24:05 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,6 +262,12 @@ void IRCServer::_processRequest(Client & client)
 			this->_processWho(request, client);
 		else if (request.getPrefix() == "WHOIS")
 			this->_processWhois(request, client);
+		else
+		{
+			client.send(":" + this->_server_name + " " + ERR_UNKNOWNCOMMAND + " "
+				+ client.getNickname() + " " + request.getPrefix()
+				+ " :Unknown command");
+		}
 	}
 }
 
