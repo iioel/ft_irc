@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:16:09 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/21 11:47:02 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/24 11:15:21 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ class Channel
 		std::vector<Client *>		_invited;
 		std::vector<Client *> 		_members;
 		std::vector<Client *>		_chanops;
-		std::vector<Client *>		_chancreators;
 
 	public:
 		Channel(std::string name);
@@ -53,12 +52,10 @@ class Channel
 		std::vector<Client *> 	getInvited() const;
 		std::vector<Client *> 	getMembers() const;
 		std::vector<Client *> 	getChanops() const;
-		std::vector<Client *> 	getChancreators() const;
 
 		bool 					isInvited(Client *client) const;
 		bool 					isMember(Client *client) const;
 		bool 					isChanop(Client *client) const;
-		bool 					isChancreator(Client *client) const;
 
 		bool 					getInviteFlag() const;
 		bool 					getTopicFlag() const;
@@ -73,7 +70,6 @@ class Channel
 		void setInvited(std::vector<Client *> invited);
 		void setMembers(std::vector<Client *> members);
 		void setChanops(std::vector<Client *> chanops);
-		void setChancreators(std::vector<Client *> chancreators);
 		void setInviteFlag(bool inviteFlag);
 		void setTopicFlag(bool topicFlag);
 		void setPasswordFlag(bool passwordFlag);
@@ -87,9 +83,6 @@ class Channel
 
 		void addChanop(Client *chanop);
 		void removeChanop(Client *chanop);
-
-		void addChancreator(Client *chancreator);
-		void removeChancreator(Client *chancreator);
 
 		void sendToAll(std::string message);
 		void sendToAllButOne(std::string message, Client *client);

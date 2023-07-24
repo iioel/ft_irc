@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 19:34:33 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/23 20:02:18 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/24 11:20:18 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,7 @@ int IRCServer::_processWhois(Message & request, Client & client)
 		{
 			if ((*it)->isMember(target_client))
 			{
-				std::string rank = "";
-				if ((*it)->isChancreator(target_client))
-					rank = "~";
-				else if ((*it)->isChanop(target_client))
-					rank = "@";
+				std::string rank = (*it)->isChanop(target_client) ? "@" : "";
 				client.send(":" + this->_server_name + " " + RPL_WHOISCHANNELS + " "
 						+ client.getFQUN() + " " + target_client->getNickname() + " "
 						+ rank + (*it)->getName());

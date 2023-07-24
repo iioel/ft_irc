@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 20:19:17 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/23 20:37:38 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/24 11:37:24 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,14 @@ int IRCServer::_processNames(Message & request, Client & client)
 			std::vector<Client *> members = channel->getMembers();
 			for (std::vector<Client *>::iterator it2 = members.begin(); it2 != members.end(); it2++)
 			{
-				std::string rank;
-				if (channel->isChancreator(*it2))
-					rank = "~";
-				else if (channel->isChanop(*it2))
-					rank = "@";
+				std::string rank = channel->isChanop(*it2) ? "@" : "";
 				client.send(":" + this->_server_name + " " + RPL_NAMREPLY + " "
 							+ client.getFQUN() + " = " + *it + " :"
 							+ rank + (*it2)->getFQUN());
 			}
+		}
 		client.send(":" + this->_server_name + " " + RPL_ENDOFNAMES + " "
 					+ client.getFQUN() + " " + *it + " :End of NAMES list");
-		}
 	}
 	return (0);
 }

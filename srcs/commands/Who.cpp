@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 18:47:49 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/23 20:01:49 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/24 11:18:30 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,7 @@ int IRCServer::_processWho(Message & request, Client & client)
 			std::vector<Client *>	members = channel->getMembers();
 			for (std::vector<Client *>::iterator it = members.begin(); it != members.end(); it++)
 			{
-				std::string rank = "";
-				if (channel->isChancreator(*it))
-					rank = "~";
-				else if (channel->isChanop(*it))
-					rank = "@";
+				std::string rank = channel->isChanop(*it) ? "@" : "";
 				client.send(":" + this->_server_name + " " + RPL_WHOREPLY + " "
 					+ client.getFQUN() + " " + channel->getName() + " "
 					+ (*it)->getUsername() + " " + (*it)->getHostname() + " "

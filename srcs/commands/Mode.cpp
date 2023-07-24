@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 16:09:40 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/23 19:19:14 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/24 11:07:06 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int IRCServer::_processMode(Message & message, Client & client)
 			return (client.send(":" + this->_server_name + " " + RPL_CHANNELMODEIS + " "
 					+ client.getFQUN() + " " + target + " " + channel->getModes()));
 		}
-		else if (! channel->isChanop(&client) && ! channel->isChancreator(&client))
+		else if (! channel->isChanop(&client))
 		{
 			return (client.send(":" + this->_server_name + " " + ERR_CHANOPRIVSNEEDED
 					+ " " + client.getFQUN() + " " + target
