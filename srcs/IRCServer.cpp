@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/23 20:32:32 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/24 12:00:17 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,6 +246,8 @@ void IRCServer::_processRequest(Client & client)
 			this->_processNotice(request, client);
 		else if (request.getPrefix() == "NAMES")
 			this->_processNames(request, client);
+		else if (request.getPrefix() == "LIST")
+			this->_processList(request, client);
 //		else if (request.getPrefix() == "KICK")
 //			this->_processKick(request, client);
 //		else if (request.getPrefix() == "INVITE")			lduboulo

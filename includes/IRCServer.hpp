@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/23 20:32:10 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/24 12:00:01 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ class IRCServer
 		int	_processPrivmsg(Message & request, Client & client);
 		int _processNotice(Message & request, Client & client);
 		int	_processNames(Message & request, Client & client);
+		int	_processList(Message & request, Client & client);
 //		int	_processKick(Message & request, Client & client);
 //		int	_processInvite(Message & request, Client & client);
 //		int	_processTopic(Message & request, Client & client);
