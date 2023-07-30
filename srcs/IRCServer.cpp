@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/30 15:14:02 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/07/30 17:40:25 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,6 @@ void IRCServer::_processRequest(Client & client)
 			this->_processPing(request, client);
 		else if (request.getPrefix() == "QUIT")
 			this->_processQuit(request, client);
-//	------------------------------------------------------------------------------
 		else if (request.getPrefix() == "JOIN")
 			this->_processJoin(request, client);
 		else if (request.getPrefix() == "PRIVMSG")
@@ -250,8 +249,8 @@ void IRCServer::_processRequest(Client & client)
 			this->_processNames(request, client);
 		else if (request.getPrefix() == "LIST")
 			this->_processList(request, client);
-//		else if (request.getPrefix() == "INVITE")			lduboulo
-//			this->_processInvite(request, client);
+		else if (request.getPrefix() == "INVITE")
+			this->_processInvite(request, client);
 //		else if (request.getPrefix() == "TOPIC")
 //			this->_processTopic(request, client);
 		else if (request.getPrefix() == "PART")
@@ -318,6 +317,16 @@ Channel *IRCServer::checkChannelExist(std::string channelName)
 	{
 		if ((*it)->getName() == channelName)
 			return (*it);
+	}
+	return (NULL);
+}
+
+Client	*IRCServer::findClientByNickname(std::string nickname) {
+	for (std::vector<Client *>::iterator it = this->_clients.begin();
+			it != this->_clients.end(); it++) {
+		if ((*it)->getNickname() == nickname) {
+			return (*it);
+		}
 	}
 	return (NULL);
 }

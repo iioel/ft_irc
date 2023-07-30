@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:33:53 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/24 12:24:33 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 17:39:51 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define RPL_CHANNELMODEIS "324"
 # define RPL_CREATIONTIME "329"
 # define RPL_TOPIC "332"
+# define RPL_INVITING "341"
 # define RPL_NAMREPLY "353"
 # define RPL_ENDOFNAMES "366"
 
