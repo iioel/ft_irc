@@ -6,7 +6,7 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/07/30 17:38:56 by lulutalu         ###   ########.fr        #
+#    Updated: 2023/07/30 19:18:41 by lulutalu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,8 @@ SRCS 		= main.cpp \
 			  commands/Kick.cpp \
 			  commands/Who.cpp \
 			  commands/Whois.cpp \
-			  commands/Invite.cpp
+			  commands/Invite.cpp \
+			  commands/Topic.cpp
 
 SRCS_DIR	= srcs
 

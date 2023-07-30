@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 18:47:49 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/24 12:27:07 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 19:20:56 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int IRCServer::_processWho(Message & request, Client & client)
 
 	if (mask[0] == '#')
 	{
-		Channel *channel = checkChannelExist(mask, this->_channels);
+		Channel *channel = checkChannelExist(mask);
 		if (channel)
 		{
 			std::vector<Client *>	members = channel->getMembers();
@@ -57,7 +57,7 @@ int IRCServer::_processWho(Message & request, Client & client)
 	}
 	else
 	{
-		Client *target = checkNicknameExist(mask, this->_clients);
+		Client *target = client.checkNicknameExist(mask, this->_clients);
 		if (target)
 		{
 			client.send(":" + this->_server_name + " " + RPL_WHOREPLY + " "

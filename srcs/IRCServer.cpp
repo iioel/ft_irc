@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/30 17:40:25 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/07/30 18:34:06 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,8 +251,8 @@ void IRCServer::_processRequest(Client & client)
 			this->_processList(request, client);
 		else if (request.getPrefix() == "INVITE")
 			this->_processInvite(request, client);
-//		else if (request.getPrefix() == "TOPIC")
-//			this->_processTopic(request, client);
+		else if (request.getPrefix() == "TOPIC")
+			this->_processTopic(request, client);
 		else if (request.getPrefix() == "PART")
 			this->_processPart(request, client);
 		else if (request.getPrefix() == "MODE")

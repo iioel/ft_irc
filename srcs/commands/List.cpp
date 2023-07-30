@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 11:51:24 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/24 12:15:08 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 19:19:28 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int IRCServer::_processList(Message & request, Client & client)
 		}
 		for (std::vector<std::string>::iterator it = targets.begin(); it != targets.end(); it++)
 		{
-			Channel * channel = checkChannelExist(*it, this->_channels);
+			Channel * channel = checkChannelExist(*it);
 			if (! channel)
 			{
 				client.send(":" + this->_server_name + " " + ERR_NOSUCHCHANNEL + " "

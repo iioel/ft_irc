@@ -6,12 +6,12 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 20:19:17 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/24 11:37:24 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 19:20:09 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCServer.hpp"
-#include "Reply.hpp"
+#include "../../includes/IRCServer.hpp"
+#include "../../includes/Reply.hpp"
 
 int IRCServer::_processNames(Message & request, Client & client)
 {
@@ -35,7 +35,7 @@ int IRCServer::_processNames(Message & request, Client & client)
 
 	for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++)
 	{
-		Channel *channel = checkChannelExist(*it, this->_channels);
+		Channel *channel = checkChannelExist(*it);
 		if (channel)
 		{
 			std::vector<Client *> members = channel->getMembers();

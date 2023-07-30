@@ -6,12 +6,12 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 19:07:05 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/23 20:11:55 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 19:18:21 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCServer.hpp"
-#include "Reply.hpp"
+#include "../../includes/IRCServer.hpp"
+#include "../../includes/Reply.hpp"
 
 int	IRCServer::_processNotice(Message & request, Client & client)
 {
@@ -44,7 +44,7 @@ int	IRCServer::_processNotice(Message & request, Client & client)
 	{
 		if (it->find("#") == 0) // Channel
 		{
-			Channel * target = checkChannelExist(*it, this->_channels);
+			Channel * target = checkChannelExist(*it);
 			if (target)
 			{
 				if (target->isMember(&client))
@@ -54,7 +54,7 @@ int	IRCServer::_processNotice(Message & request, Client & client)
 		}
 		else // User
 		{
-			Client *target = checkNicknameExist(*it, this->_clients);
+			Client *target = client.checkNicknameExist(*it, this->_clients);
 			if (target)
 			{
 				target->send(":" + client.getFQUN() + " NOTICE "
