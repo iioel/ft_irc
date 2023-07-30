@@ -6,12 +6,12 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 16:09:40 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/20 14:45:13 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 15:05:56 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCServer.hpp"
-#include "Reply.hpp"
+#include "../../includes/IRCServer.hpp"
+#include "../../includes/Reply.hpp"
 
 #include <cstdlib>
 
@@ -78,7 +78,7 @@ int IRCServer::_processMode(Message & message, Client & client)
 	target = params[0];
 	if (target[0] == '#')
 	{
-		Channel *channel = checkChannelExist(target, this->_channels);
+		Channel *channel = checkChannelExist(target);
 		Channel backup_chan = *channel;
 		if (! channel)
 		{
@@ -166,7 +166,7 @@ int IRCServer::_processMode(Message & message, Client & client)
 				{
 					if (param_pos < params.size())
 					{
-						Client *client_op = checkNicknameExist(params[param_pos],
+						Client *client_op = client.checkNicknameExist(params[param_pos],
 								this->_clients);
 						if (client_op)
 						{
@@ -216,7 +216,7 @@ int IRCServer::_processMode(Message & message, Client & client)
 	}
 	else
 	{
-		if (checkNicknameExist(target, this->_clients))
+		if (client.checkNicknameExist(target, this->_clients))
 		{
 			if (target != client.getNickname())
 			{

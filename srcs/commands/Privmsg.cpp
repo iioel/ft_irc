@@ -6,12 +6,12 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 19:07:05 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/20 14:43:31 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 15:04:55 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCServer.hpp"
-#include "Reply.hpp"
+#include "../../includes/IRCServer.hpp"
+#include "../../includes/Reply.hpp"
 
 int	IRCServer::_processPrivmsg(Message & request, Client & client)
 {
@@ -45,7 +45,7 @@ int	IRCServer::_processPrivmsg(Message & request, Client & client)
 	{
 		if (it->find("#") == 0) // Channel
 		{
-			Channel * target = checkChannelExist(*it, this->_channels);
+			Channel * target = checkChannelExist(*it);
 			if (target)
 			{
 				if (target->isMember(&client))
@@ -63,7 +63,7 @@ int	IRCServer::_processPrivmsg(Message & request, Client & client)
 		}
 		else // User
 		{
-			Client *target = checkNicknameExist(*it, this->_clients);
+			Client *target = client.checkNicknameExist(*it, this->_clients);
 			std::cout << "target: " << target << std::endl;
 			std::cout << "it: " << *it << std::endl;
 			if (target)

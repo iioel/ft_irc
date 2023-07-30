@@ -6,12 +6,12 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 16:34:45 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/21 12:05:21 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/30 15:06:51 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCServer.hpp"
-#include "Reply.hpp"
+#include "../../includes/IRCServer.hpp"
+#include "../../includes/Reply.hpp"
 
 int IRCServer::_processPart(Message & request, Client & client)
 {
@@ -49,7 +49,7 @@ int IRCServer::_processPart(Message & request, Client & client)
 	
 	for (std::vector<std::string>::iterator it = targets.begin(); it != targets.end(); it++)
 	{
-		Channel * channel = checkChannelExist(*it, this->_channels);
+		Channel * channel = checkChannelExist(*it);
 		if (! channel)
 		{
 			client.send(":" + this->_server_name + " " + ERR_NOSUCHCHANNEL + " "

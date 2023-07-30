@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/22 16:45:21 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/07/30 14:41:11 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,16 @@ bool Channel::isInvited(Client *client) const
 	return (false);
 }
 
+Client *Channel::getClientFromNickname(std::string nickname) {
+	for (std::vector<Client *>::iterator it = _members.begin(); 
+			it != _members.end(); it++) {
+		if ((*it)->getNickname() == nickname) {
+			return (*it);
+		}
+	}
+	return (NULL);
+}
+
 bool Channel::isMember(Client *client) const
 {
 	std::vector<Client *>::const_iterator it = this->_members.begin();
@@ -190,16 +200,6 @@ bool Channel::getPasswordFlag() const
 bool Channel::getLimitFlag() const
 {
 	return (this->_limitFlag);
-}
-
-Client	*Channel::getMemberFromName(std::string username) {
-	for (std::vector<Client *>::iterator it = this->_members.begin();
-			it != this->_members.end(); it++) {
-		if (username == (*it)->getUsername()) {
-			return (*it);
-		}
-	}
-	return (NULL);
 }
 
 // Setters
@@ -396,16 +396,4 @@ std::string	Channel::getModes() const
 	if (modes.size() > 0)
 		modes.insert(0, "+");
 	return (modes);
-}
-
-// Static functions
-
-Channel * checkChannelExist(std::string channelName, std::vector<Channel *> channels)
-{
-	for (std::vector<Channel *>::iterator it = channels.begin(); it != channels.end(); it++)
-	{
-		if ((*it)->getName() == channelName)
-			return (*it);
-	}
-	return (NULL);
 }

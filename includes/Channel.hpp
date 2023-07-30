@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:16:09 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/22 16:46:05 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/07/30 14:41:53 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ class Channel
 		std::vector<Client *> 	getChancreators() const;
 
 		bool 					isInvited(Client *client) const;
+
+		Client*					getClientFromNickname(std::string nickname);
+
 		bool 					isMember(Client *client) const;
 		bool 					isChanop(Client *client) const;
 		bool 					isChancreator(Client *client) const;
@@ -64,8 +67,6 @@ class Channel
 		bool 					getTopicFlag() const;
 		bool 					getPasswordFlag() const;
 		bool 					getLimitFlag() const;
-
-		Client*					getMemberFromName(std::string username);
 
 		// Setters
 		void setName(std::string name);
@@ -99,6 +100,5 @@ class Channel
 
 };
 
-Channel * 	checkChannelExist(std::string channelName, std::vector<Channel *> channels);
 
 #endif

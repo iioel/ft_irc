@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/22 15:41:51 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/07/30 15:14:02 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,8 +243,8 @@ void IRCServer::_processRequest(Client & client)
 			this->_processJoin(request, client);
 		else if (request.getPrefix() == "PRIVMSG")
 			this->_processPrivmsg(request, client);
-//		else if (request.getPrefix() == "KICK")
-//			this->_processKick(request, client);
+		else if (request.getPrefix() == "KICK")
+			this->_processKick(request, client);
 //		else if (request.getPrefix() == "INVITE")			lduboulo
 //			this->_processInvite(request, client);
 //		else if (request.getPrefix() == "TOPIC")
@@ -296,12 +296,13 @@ void IRCServer::_removeChannel(Channel * channel)
 
 }
 
-Channel	*IRCServer::_getChannelFromName(std::string name) {
+Channel *IRCServer::checkChannelExist(std::string channelName)
+{
 	for (std::vector<Channel *>::iterator it = this->_channels.begin(); 
-			it != this->_channels.end(); it++) {
-		if ((*it)->getName() == name) {
+			it != this->_channels.end(); it++)
+	{
+		if ((*it)->getName() == channelName)
 			return (*it);
-		}
 	}
 	return (NULL);
 }

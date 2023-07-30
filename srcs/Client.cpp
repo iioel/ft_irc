@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/22 15:23:15 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/07/23 13:14:36 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,9 +270,7 @@ int Client::ping()
 	return (0);
 }
 
-// Static
-
-Client * checkNicknameExist(std::string nickname, std::vector<Client *> clients)
+Client	*Client::checkNicknameExist(std::string nickname, std::vector<Client *> clients)
 {
 	for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++)
 	{
