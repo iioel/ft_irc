@@ -12,9 +12,9 @@
 
 #include <sstream>
 
-#include "../includes/IRCServer.hpp"
-#include "../includes/Message.hpp"
-#include "../includes/Reply.hpp"
+#include "IRCServer.hpp"
+#include "Message.hpp"
+#include "Reply.hpp"
 
 IRCServer::IRCServer()
 {
@@ -57,14 +57,14 @@ int IRCServer::run()
 		for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 		{
 			if (this->_recv(**it))
-				break;
+				continue;
 			this->_send(**it);
-			if ((*it)->ping() || ((*it)->isRemoved() && (*it)->getResponse().size() == 0))
-			{
-				this->_removeClient(*it);
-				break;
-			}
+		}
 
+		for (size_t i = 0; i < this->_clients.size(); ++i)
+		{
+			if ((this->_clients[i]->isRemoved() && ! this->_clients[i]->getResponse().size()) || this->_clients[i]->ping())
+				this->_removeClient(this->_clients[i--]);
 		}
 	}
 }
@@ -170,8 +170,8 @@ int IRCServer::_recv(Client & client)
 		else if (ret == 0)
 		{
 			std::cout << "Client disconnected" << std::endl;
-			this->_removeClient(&client);
-			return (1);
+			client.remove();
+			return 1;
 		}
 		else
 		{
@@ -187,7 +187,6 @@ int IRCServer::_send(Client & client)
 {
 	if (FD_ISSET(client.getSocket(), &this->_writefds))
 	{
-		std::cout << "Sending" << std::endl;
 		std::string buffer = client.getResponse();
 		if (buffer.size() > 0)
 		{
@@ -245,6 +244,12 @@ void IRCServer::_processRequest(Client & client)
 			this->_processPrivmsg(request, client);
 		else if (request.getPrefix() == "KICK")
 			this->_processKick(request, client);
+		else if (request.getPrefix() == "NOTICE")
+			this->_processNotice(request, client);
+		else if (request.getPrefix() == "NAMES")
+			this->_processNames(request, client);
+		else if (request.getPrefix() == "LIST")
+			this->_processList(request, client);
 //		else if (request.getPrefix() == "INVITE")			lduboulo
 //			this->_processInvite(request, client);
 //		else if (request.getPrefix() == "TOPIC")
@@ -253,6 +258,16 @@ void IRCServer::_processRequest(Client & client)
 			this->_processPart(request, client);
 		else if (request.getPrefix() == "MODE")
 			this->_processMode(request, client);
+		else if (request.getPrefix() == "WHO")
+			this->_processWho(request, client);
+		else if (request.getPrefix() == "WHOIS")
+			this->_processWhois(request, client);
+		else
+		{
+			client.send(":" + this->_server_name + " " + ERR_UNKNOWNCOMMAND + " "
+				+ client.getNickname() + " " + request.getPrefix()
+				+ " :Unknown command");
+		}
 	}
 }
 

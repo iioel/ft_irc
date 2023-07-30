@@ -37,10 +37,15 @@ SRCS 		= main.cpp \
 			  commands/Quit.cpp \
 			  commands/Pass.cpp \
 			  commands/Privmsg.cpp \
+			  commands/Notice.cpp \
+			  commands/List.cpp \
+			  commands/Names.cpp \
 			  commands/Mode.cpp \
 			  commands/Join.cpp \
 			  commands/Part.cpp \
-			  commands/Kick.cpp
+			  commands/Kick.cpp \
+			  commands/Who.cpp \
+			  commands/Whois.cpp
 
 SRCS_DIR	= srcs
 

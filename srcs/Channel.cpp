@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Channel.hpp"
+#include "Channel.hpp"
 
 Channel::Channel(std::string name) : _name(name)
 {
@@ -60,7 +60,6 @@ Channel & Channel::operator=(Channel const & src)
 		this->_invited = src._invited;
 		this->_members = src._members;
 		this->_chanops = src._chanops;
-		this->_chancreators = src._chancreators;
 	}
 	return (*this);
 }
@@ -119,11 +118,6 @@ std::vector<Client *> Channel::getChanops() const
 	return (this->_chanops);
 }
 
-std::vector<Client *> Channel::getChancreators() const
-{
-	return (this->_chancreators);
-}
-
 bool Channel::isInvited(Client *client) const
 {
 	std::vector<Client *>::const_iterator it = this->_invited.begin();
@@ -162,18 +156,6 @@ bool Channel::isChanop(Client *client) const
 {
 	std::vector<Client *>::const_iterator it = this->_chanops.begin();
 	while (it != this->_chanops.end())
-	{
-		if (*it == client)
-			return (true);
-		it++;
-	}
-	return (false);
-}
-
-bool Channel::isChancreator(Client *client) const
-{
-	std::vector<Client *>::const_iterator it = this->_chancreators.begin();
-	while (it != this->_chancreators.end())
 	{
 		if (*it == client)
 			return (true);
@@ -237,11 +219,6 @@ void Channel::setMembers(std::vector<Client *> members)
 void Channel::setChanops(std::vector<Client *> chanops)
 {
 	this->_chanops = chanops;
-}
-
-void Channel::setChancreators(std::vector<Client *> chancreators)
-{
-	this->_chancreators = chancreators;
 }
 
 void Channel::setInviteFlag(bool inviteFlag)
@@ -310,7 +287,6 @@ void Channel::removeMember(Client *client)
 	}
 	this->removeInvited(client);
 	this->removeChanop(client);
-	this->removeChancreator(client);
 }
 
 void Channel::addChanop(Client *client)
@@ -329,29 +305,6 @@ void Channel::removeChanop(Client *client)
 			if (*it == client)
 			{
 				this->_chanops.erase(it);
-				break ;
-			}
-			it++;
-		}
-	}
-}
-
-void Channel::addChancreator(Client *client)
-{
-	if (!this->isChancreator(client))
-		this->_chancreators.push_back(client);
-}
-
-void Channel::removeChancreator(Client *client)
-{
-	std::vector<Client *>::iterator it = this->_chancreators.begin();
-	if (this->isChancreator(client))
-	{
-		while (it != this->_chancreators.end())
-		{
-			if (*it == client)
-			{
-				this->_chancreators.erase(it);
 				break ;
 			}
 			it++;

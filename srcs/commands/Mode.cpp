@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/IRCServer.hpp"
-#include "../../includes/Reply.hpp"
+#include "IRCServer.hpp"
+#include "Reply.hpp"
 
 #include <cstdlib>
 
@@ -96,7 +96,7 @@ int IRCServer::_processMode(Message & message, Client & client)
 			return (client.send(":" + this->_server_name + " " + RPL_CHANNELMODEIS + " "
 					+ client.getFQUN() + " " + target + " " + channel->getModes()));
 		}
-		else if (! channel->isChanop(&client) && ! channel->isChancreator(&client))
+		else if (! channel->isChanop(&client))
 		{
 			return (client.send(":" + this->_server_name + " " + ERR_CHANOPRIVSNEEDED
 					+ " " + client.getFQUN() + " " + target
@@ -203,15 +203,16 @@ int IRCServer::_processMode(Message & message, Client & client)
 				}
 				else
 				{
-					client.send(":" + this->_server_name + " "
+					return (client.send(":" + this->_server_name + " "
 							+ ERR_UNKNOWNMODE + " " + client.getFQUN() + " "
-							+ *it + " :is unknown mode char to me for " + target);
+							+ *it + " :is unknown mode char to me for " + target));
 				}
 			}
 			client.send(":" + client.getFQUN() + " MODE " + target + " "
 					+ getModesDiff(channel, &backup_chan));
-			//channel->sendToAll(":" + this->_server_name + " " + RPL_CHANNELMODEIS + " "
-			//		+ client.getFQUN() + " " + target + " " + channel->getModes());
+			if (getModesDiff(channel, &backup_chan) != "")
+				channel->sendToAllButOne(":" + client.getFQUN() + " MODE " + target + " "
+						+ getModesDiff(channel, &backup_chan), &client);
 		}
 	}
 	else

@@ -85,12 +85,18 @@ class IRCServer
 		int	_processJoin(Message & request, Client & client);
 		int	_processPrivmsg(Message & request, Client & client);
 		int	_processKick(Message & request, Client & client);
+		int _processNotice(Message & request, Client & client);
+		int	_processNames(Message & request, Client & client);
+		int	_processList(Message & request, Client & client);
 //		int	_processInvite(Message & request, Client & client);
 //		int	_processTopic(Message & request, Client & client);
 		int _processPart(Message & request, Client & client);
 		int	_processMode(Message & request, Client & client);
 
 		Channel	*checkChannelExist(std::string channelName);
+
+		int	_processWho(Message & request, Client & client);
+		int	_processWhois(Message & request, Client & client);
 };
 
 #endif

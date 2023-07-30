@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Privmsg.cpp                                        :+:      :+:    :+:   */
+/*   Notice.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 19:07:05 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/30 15:04:55 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/07/23 20:11:55 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "IRCServer.hpp"
 #include "Reply.hpp"
 
-int	IRCServer::_processPrivmsg(Message & request, Client & client)
+int	IRCServer::_processNotice(Message & request, Client & client)
 {
 	std::vector<std::string> 	params = request.getParams();
 	std::vector<std::string> 	targets;
@@ -21,11 +21,9 @@ int	IRCServer::_processPrivmsg(Message & request, Client & client)
 	size_t 						pos;
 
 	if (params.size() == 0)
-		return (client.send(":" + this->_server_name + " " + ERR_NORECIPIENT
-					+ " " + client.getFQUN() + " :No recipient given (PRIVMSG)"));
+		return (0);
 	else if (params.size() == 1)
-		return (client.send(":" + this->_server_name + " " + ERR_NOTEXTTOSEND
-					+ " " + client.getFQUN() + " :No text to send"));
+		return (0);
 
 	message = params[1];
 	pos = params[0].find(",");
@@ -46,41 +44,23 @@ int	IRCServer::_processPrivmsg(Message & request, Client & client)
 	{
 		if (it->find("#") == 0) // Channel
 		{
-			Channel * target = checkChannelExist(*it);
+			Channel * target = checkChannelExist(*it, this->_channels);
 			if (target)
 			{
 				if (target->isMember(&client))
-					target->sendToAllButOne(":" + client.getFQUN() + " PRIVMSG "
+					target->sendToAllButOne(":" + client.getFQUN() + " NOTICE "
 							+ *it + " :" + message, &client);
-				else
-					client.send(":" + this->_server_name + " " + ERR_CANNOTSENDTOCHAN
-							+ " " + client.getFQUN() + " " + *it
-							+ " :Cannot send to channel");
 			}
-			else
-				client.send(":" + this->_server_name + " " + ERR_NOSUCHCHANNEL
-						+ " " + client.getFQUN() + " " + *it
-						+ " :No such channel");
 		}
 		else // User
 		{
-			Client *target = client.checkNicknameExist(*it, this->_clients);
-			std::cout << "target: " << target << std::endl;
-			std::cout << "it: " << *it << std::endl;
+			Client *target = checkNicknameExist(*it, this->_clients);
 			if (target)
 			{
-				target->send(":" + client.getFQUN() + " PRIVMSG "
+				target->send(":" + client.getFQUN() + " NOTICE "
 						+ *it + " :" + message);
-			}
-			else
-			{
-				client.send(":" + this->_server_name + " " + ERR_NOSUCHNICK + " "
-						+ client.getFQUN() + " " + *it
-						+ " :No such nick");
 			}
 		}
 	}
 	return (0);
 }
-
-

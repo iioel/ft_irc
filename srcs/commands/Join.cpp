@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/IRCServer.hpp"
-#include "../../includes/Reply.hpp"
+#include "IRCServer.hpp"
+#include "Reply.hpp"
 
 int	IRCServer::_processJoin(Message & request, Client & client) {
 
@@ -79,7 +79,6 @@ int	IRCServer::_processJoin(Message & request, Client & client) {
 			else // Create new channel
 				channel = new Channel(channel_name);
 			this->_channels.push_back(channel);
-			channel->addChancreator(&client);
 			channel->addChanop(&client);
 			channel->addMember(&client);
 		}
@@ -126,11 +125,7 @@ int	IRCServer::_processJoin(Message & request, Client & client) {
 		std::vector<Client *> members = channel->getMembers();
 		for (std::vector<Client *>::iterator it3 = members.begin(); it3 != members.end(); it3++)
 		{
-			std::string rank;
-			if (channel->isChanop(*it3))
-				rank = "@";
-			else if (channel->isChancreator(*it3))
-				rank = "&";
+			std::string rank = channel->isChanop(*it3) ? "@" : "";
 			client.send(":" + this->_server_name + " " + RPL_NAMREPLY + " "
 						+ client.getFQUN() + " = " + channel_name + " :"
 						+ rank + (*it3)->getFQUN());
