@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:12:41 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/19 15:41:15 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/23 13:15:25 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ class Client
 
 		int		send(std::string msg);
 		int 	ping();
+		Client	*checkNicknameExist(std::string nickname, std::vector<Client *> clients);
 };
 
-Client * checkNicknameExist(std::string nickname, std::vector<Client *> clients);
 
 #endif

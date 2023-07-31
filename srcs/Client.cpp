@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/20 16:57:56 by yoel             ###   ########.fr       */
+/*   Updated: 2023/07/23 13:14:36 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <sys/select.h>
 #include <cstdlib>
 
-#include "Client.hpp"
+#include "../includes/Client.hpp"
 
 Client::Client(int fd, fd_set & allwritefds, std::string hostname): _allwritefds(allwritefds)
 {
@@ -270,9 +270,7 @@ int Client::ping()
 	return (0);
 }
 
-// Static
-
-Client * checkNicknameExist(std::string nickname, std::vector<Client *> clients)
+Client	*Client::checkNicknameExist(std::string nickname, std::vector<Client *> clients)
 {
 	for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++)
 	{

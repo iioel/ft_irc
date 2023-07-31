@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:42:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/07/24 11:16:44 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 15:06:21 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	IRCServer::_processJoin(Message & request, Client & client) {
 			continue ;
 		}
 
-		Channel *channel = checkChannelExist(channel_name, this->_channels);
+		Channel *channel = checkChannelExist(channel_name);
 		if (channel == NULL)
 		{
 			if (it2 != passwords.end()) // Create new channel with pass

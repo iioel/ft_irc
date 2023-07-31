@@ -6,17 +6,19 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:00:52 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/24 11:19:21 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 19:12:50 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
+#include "../includes/Channel.hpp"
 
 Channel::Channel(std::string name) : _name(name)
 {
 	this->_creationTime = time(NULL);
 	this->_password = "";
 	this->_topic = "";
+	this->_whoTopic = NULL;
+	this->_whenTopic = NULL;
 	this->_limit = 0;
 	this->_inviteFlag = false;
 	this->_topicFlag = false;
@@ -28,6 +30,8 @@ Channel::Channel(std::string name, std::string password) : _name(name), _passwor
 {
 	this->_creationTime = time(NULL);
 	this->_topic = "";
+	this->_whoTopic = NULL;
+	this->_whenTopic = NULL;
 	this->_limit = 0;
 	this->_inviteFlag = false;
 	this->_topicFlag = false;
@@ -52,6 +56,8 @@ Channel & Channel::operator=(Channel const & src)
 		this->_name = src._name;
 		this->_password = src._password;
 		this->_topic = src._topic;
+		this->_whoTopic = src._whoTopic;
+		this->_whenTopic = src._whenTopic;
 		this->_limit = src._limit;
 		this->_inviteFlag = src._inviteFlag;
 		this->_topicFlag = src._topicFlag;
@@ -84,6 +90,20 @@ std::string Channel::getPassword() const
 std::string Channel::getTopic() const
 {
 	return (this->_topic);
+}
+
+Client	*Channel::whoSetTopic() {
+	return this->_whoTopic;
+}
+
+time_t	Channel::whenSetTopic() const {
+	return this->_whenTopic;
+}
+
+std::string	Channel::getStrWhenTopic() const {
+	std::stringstream ss;
+	ss << this->_whenTopic;
+	return (ss.str());
 }
 
 std::string Channel::getStrCreationTime() const
@@ -128,6 +148,16 @@ bool Channel::isInvited(Client *client) const
 		it++;
 	}
 	return (false);
+}
+
+Client *Channel::getClientFromNickname(std::string nickname) {
+	for (std::vector<Client *>::iterator it = _members.begin(); 
+			it != _members.end(); it++) {
+		if ((*it)->getNickname() == nickname) {
+			return (*it);
+		}
+	}
+	return (NULL);
 }
 
 bool Channel::isMember(Client *client) const
@@ -189,6 +219,14 @@ void Channel::setPassword(std::string password)
 void Channel::setTopic(std::string topic)
 {
 	this->_topic = topic;
+}
+
+void Channel::setWhoTopic(Client* client) {
+	this->_whoTopic = client;
+}
+
+void Channel::setWhenTopic(time_t when) {
+	this->_whenTopic = when;
 }
 
 void Channel::setLimit(int limit)
@@ -339,16 +377,4 @@ std::string	Channel::getModes() const
 	if (modes.size() > 0)
 		modes.insert(0, "+");
 	return (modes);
-}
-
-// Static functions
-
-Channel * checkChannelExist(std::string channelName, std::vector<Channel *> channels)
-{
-	for (std::vector<Channel *>::iterator it = channels.begin(); it != channels.end(); it++)
-	{
-		if ((*it)->getName() == channelName)
-			return (*it);
-	}
-	return (NULL);
 }

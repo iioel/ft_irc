@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:16:09 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/24 11:15:21 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 19:11:55 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ class Channel
 	private:
 		std::string 				_name;
 		std::string					_topic;
+		Client*						_whoTopic;
+		time_t						_whenTopic;
 		std::string					_password;
 		time_t						_creationTime;
 		int							_limit;
@@ -46,6 +48,9 @@ class Channel
 		std::string 			getName() const;
 		std::string				getPassword() const;
 		std::string				getTopic() const;
+		Client*					whoSetTopic();
+		time_t					whenSetTopic() const;
+		std::string				getStrWhenTopic() const;
 		std::string				getStrCreationTime() const;
 		time_t					getCreationTime() const;
 		int						getLimit() const;
@@ -54,6 +59,9 @@ class Channel
 		std::vector<Client *> 	getChanops() const;
 
 		bool 					isInvited(Client *client) const;
+
+		Client*					getClientFromNickname(std::string nickname);
+
 		bool 					isMember(Client *client) const;
 		bool 					isChanop(Client *client) const;
 
@@ -66,6 +74,8 @@ class Channel
 		void setName(std::string name);
 		void setPassword(std::string password);
 		void setTopic(std::string topic);
+		void setWhoTopic(Client* client);
+		void setWhenTopic(time_t when);
 		void setLimit(int limit);
 		void setInvited(std::vector<Client *> invited);
 		void setMembers(std::vector<Client *> members);
@@ -90,6 +100,5 @@ class Channel
 
 };
 
-Channel * 	checkChannelExist(std::string channelName, std::vector<Channel *> channels);
 
 #endif

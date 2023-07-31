@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 11:00:14 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/24 12:00:01 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 18:35:13 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,16 +84,19 @@ class IRCServer
 		int	_processQuit(Message & request, Client & client);
 		int	_processJoin(Message & request, Client & client);
 		int	_processPrivmsg(Message & request, Client & client);
+		int	_processKick(Message & request, Client & client);
 		int _processNotice(Message & request, Client & client);
 		int	_processNames(Message & request, Client & client);
 		int	_processList(Message & request, Client & client);
-//		int	_processKick(Message & request, Client & client);
-//		int	_processInvite(Message & request, Client & client);
-//		int	_processTopic(Message & request, Client & client);
+		int	_processInvite(Message & request, Client & client);
+		int	_processTopic(Message & request, Client & client);
 		int _processPart(Message & request, Client & client);
 		int	_processMode(Message & request, Client & client);
 		int	_processWho(Message & request, Client & client);
 		int	_processWhois(Message & request, Client & client);
+
+		Channel	*checkChannelExist(std::string channelName);
+		Client	*findClientByNickname(std::string nickname);
 };
 
 #endif

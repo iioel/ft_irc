@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 19:34:33 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/24 11:20:18 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 19:21:32 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int IRCServer::_processWhois(Message & request, Client & client)
 				+ client.getFQUN() + " " + target + " :No such server");
 		return (0);
 	}
-	Client *target_client = checkNicknameExist(nick, this->_clients);
+	Client *target_client = client.checkNicknameExist(nick, this->_clients);
 	if (!target_client)
 	{
 		client.send(":" + this->_server_name + " " + ERR_NOSUCHNICK + " "

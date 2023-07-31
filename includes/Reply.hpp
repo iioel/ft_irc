@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:33:53 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/24 12:24:33 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 18:50:57 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
 # define RPL_LISTSTART "321"
 # define RPL_LIST "322"
 # define RPL_LISTEND "323"
+# define RPL_NOTOPIC "331"
+# define RPL_TOPIC "332"
+# define RPL_TOPICWHOTIME "333"
 # define RPL_WHOISACTUALLY "338"
 # define RPL_ENDOFWHOIS "318"
 # define RPL_WHOREPLY "352"
@@ -33,6 +36,7 @@
 # define RPL_CHANNELMODEIS "324"
 # define RPL_CREATIONTIME "329"
 # define RPL_TOPIC "332"
+# define RPL_INVITING "341"
 # define RPL_NAMREPLY "353"
 # define RPL_ENDOFNAMES "366"
 

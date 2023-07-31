@@ -6,12 +6,12 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:19:54 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/20 16:03:57 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 15:03:43 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCServer.hpp"
-#include "Reply.hpp"
+#include "../../includes/IRCServer.hpp"
+#include "../../includes/Reply.hpp"
 
 bool checkNickname(std::string nickname)
 {
@@ -48,7 +48,7 @@ int	IRCServer::_processNick(Message & request, Client & client)
 					+ " " + client.getNickname() + " :No nickname given"));
 	else if (params.size() == 1 && checkNickname(nickname))
 	{
-		if (checkNicknameExist(nickname, this->_clients))
+		if (client.checkNicknameExist(nickname, this->_clients))
 			client.send(":" + this->_server_name + " " + ERR_NICKNAMEINUSE
 					+ " " + client.getNickname() + " " + nickname
 					+ " :Nickname is already in use.");

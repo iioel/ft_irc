@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 13:19:33 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/24 12:24:05 by ycornamu         ###   ########.fr       */
+/*   Updated: 2023/07/30 18:34:06 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,23 +237,22 @@ void IRCServer::_processRequest(Client & client)
 			this->_processPing(request, client);
 		else if (request.getPrefix() == "QUIT")
 			this->_processQuit(request, client);
-//	------------------------------------------------------------------------------
 		else if (request.getPrefix() == "JOIN")
 			this->_processJoin(request, client);
 		else if (request.getPrefix() == "PRIVMSG")
 			this->_processPrivmsg(request, client);
+		else if (request.getPrefix() == "KICK")
+			this->_processKick(request, client);
 		else if (request.getPrefix() == "NOTICE")
 			this->_processNotice(request, client);
 		else if (request.getPrefix() == "NAMES")
 			this->_processNames(request, client);
 		else if (request.getPrefix() == "LIST")
 			this->_processList(request, client);
-//		else if (request.getPrefix() == "KICK")
-//			this->_processKick(request, client);
-//		else if (request.getPrefix() == "INVITE")			lduboulo
-//			this->_processInvite(request, client);
-//		else if (request.getPrefix() == "TOPIC")
-//			this->_processTopic(request, client);
+		else if (request.getPrefix() == "INVITE")
+			this->_processInvite(request, client);
+		else if (request.getPrefix() == "TOPIC")
+			this->_processTopic(request, client);
 		else if (request.getPrefix() == "PART")
 			this->_processPart(request, client);
 		else if (request.getPrefix() == "MODE")
@@ -309,6 +308,27 @@ void IRCServer::_removeChannel(Channel * channel)
 		}
 	}
 
+}
+
+Channel *IRCServer::checkChannelExist(std::string channelName)
+{
+	for (std::vector<Channel *>::iterator it = this->_channels.begin(); 
+			it != this->_channels.end(); it++)
+	{
+		if ((*it)->getName() == channelName)
+			return (*it);
+	}
+	return (NULL);
+}
+
+Client	*IRCServer::findClientByNickname(std::string nickname) {
+	for (std::vector<Client *>::iterator it = this->_clients.begin();
+			it != this->_clients.end(); it++) {
+		if ((*it)->getNickname() == nickname) {
+			return (*it);
+		}
+	}
+	return (NULL);
 }
 
 void IRCServer::_sendToAll(std::string message)
