@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 14:56:28 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/07/30 15:40:25 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/08/06 18:43:06 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,22 @@ int	IRCServer::_processKick(Message &request, Client &client) {
 	size_t						nSep = 0;
 
 	if (params.size() < 2) {
-		return (client.send(this->_server_name + " " + ERR_NEEDMOREPARAMS + \
+		return (client.send(":" + this->_server_name + " " + ERR_NEEDMOREPARAMS + " " +
 					client.getFQUN() + " KICK :Not enough parameters"));
 	}
 
 	Channel* chan = this->checkChannelExist(params[0]);
 	if (chan == NULL) {
-		return (client.send(this->_server_name + " " + ERR_NOSUCHCHANNEL \
-					+ client.getFQUN() + " KICK :Channel doesn't exist"));
+		return (client.send(":" + this->_server_name + " " + ERR_NOSUCHCHANNEL + " " +
+					client.getFQUN() + " " + params[0] + " :No such channel"));
 	}
 	if (!chan->isMember(&client)) {
-		return (client.send(this->_server_name + " " + ERR_NOTONCHANNEL \
-					+ client.getFQUN() + " KICK :User is not a member of the channel"));
+		return (client.send(":" + this->_server_name + " " + ERR_NOTONCHANNEL + " " +
+					client.getFQUN() + " " + params[0] + " :You're not on that channel"));
 	}
 	if (!chan->isChanop(&client)) {
-		return (client.send(this->_server_name + " " + ERR_CHANOPRIVSNEEDED \
-					+ client.getFQUN() + " KICK :User doesn't have enough privileges"));
+		return (client.send(":" + this->_server_name + " " + ERR_CHANOPRIVSNEEDED + " " +
+					client.getFQUN() + " " + params[0] + " :You're not channel operator"));
 	}
 
 	nSep = params[1].find(",");
@@ -61,19 +61,15 @@ int	IRCServer::_processKick(Message &request, Client &client) {
 			it != target_users.end(); it++) {
 		Client* user = chan->getClientFromNickname(*it);
 		if (user == NULL) {
-			return (client.send(this->_server_name + " " + *it + " " + ERR_USERNOTINCHANNEL + \
-						client.getFQUN() + " KICK :Target of command isn't on channel"));
-		} else if (params.size() == 3) {
-			user->send("You've been kicked of " + chan->getName() + " channel. REASON : " + \
-					params[2]);
+			return (client.send(":" + this->_server_name + " " + ERR_USERNOTINCHANNEL + " " +
+						client.getFQUN() + " " + *it + " " + chan->getName() +
+						" :They aren't on that channel"));
+		} else if (params.size() == 3 && !params[2].empty()) {
+			chan->sendToAll(":" + client.getFQUN() + " KICK " + chan->getName() + " " + *it + " :" + params[2]);
 			chan->removeMember(user);
-			client.send(this->_server_name + " " + client.getFQUN() + " User " + \
-					*it + " has been kicked");
 		} else {
-			user->send("You've been kicked of " + chan->getName());
+			chan->sendToAll(":" + client.getFQUN() + " KICK " + chan->getName() + " " + *it + " :Infringement of rules");
 			chan->removeMember(user);
-			client.send(this->_server_name + " " + client.getFQUN() + " User " + \
-					*it + " has been kicked");
 		}
 	}
 	return (0);
