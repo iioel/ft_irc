@@ -6,12 +6,12 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:42:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/07/30 15:06:21 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/08/06 15:34:50 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCServer.hpp"
-#include "Reply.hpp"
+#include "../../includes/IRCServer.hpp"
+#include "../../includes/Reply.hpp"
 
 int	IRCServer::_processJoin(Message & request, Client & client) {
 
@@ -116,9 +116,14 @@ int	IRCServer::_processJoin(Message & request, Client & client) {
 		client.send(":" + this->_server_name + " " + RPL_CREATIONTIME + " "
 					+ client.getFQUN() + " " + channel_name + " "
 					+ channel->getStrCreationTime());
-		client.send(":" + this->_server_name + " " + RPL_TOPIC + " "
-					+ client.getFQUN() + " " + channel_name + " :"
-					+ channel->getTopic());
+		if (!channel->getTopic().empty()) {
+			client.send(":" + this->_server_name + " " + RPL_TOPIC + " "
+						+ client.getFQUN() + " " + channel_name + " :"
+						+ channel->getTopic());
+			client.send(":" + this->_server_name + " " + RPL_TOPICWHOTIME + " " +
+					client.getFQUN() + " " + channel_name + " " + 
+					channel->whoSetTopic()->getFQUN() + " " + channel->getStrWhenTopic());
+		}
 		client.send(":" + this->_server_name + " " + RPL_CHANNELMODEIS + " "
 					+ client.getFQUN() + " " + channel_name + " "
 					+ channel->getModes());
