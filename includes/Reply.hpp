@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:33:53 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/30 18:50:57 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/08/06 19:20:19 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define RPL_ENDOFWHOIS "318"
 # define RPL_WHOREPLY "352"
 # define RPL_ENDOFWHO "315"
+# define RPL_ENDOFBANLIST "368"
 # define RPL_MOTDSTART "375"
 # define RPL_MOTD "372"
 # define RPL_ENDOFMOTD "376"

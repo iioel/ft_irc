@@ -6,7 +6,7 @@
 /*   By: yoel <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:53:25 by yoel              #+#    #+#             */
-/*   Updated: 2023/07/23 13:14:36 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/08/06 19:52:19 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,15 @@ std::string	Client::getRealname() const
 
 std::string	Client::getRequest()
 {
-	size_t pos = this->_request.find("\r\n");
+	size_t pos = this->_request.find("\n");
 	if (pos != std::string::npos)
 	{
 		std::string request = this->_request.substr(0, pos);
-		this->_request.erase(0, pos + 2);
+		this->_request.erase(0, pos + 1);
+		pos = request.find("\r");
+		if (pos != std::string::npos) {
+			request.erase(pos, 1);
+		}
 		return (request);
 	}
 	return ("");

@@ -6,12 +6,12 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 16:09:40 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/07/30 15:05:56 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/08/06 19:19:50 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCServer.hpp"
-#include "Reply.hpp"
+#include "../../includes/IRCServer.hpp"
+#include "../../includes/Reply.hpp"
 
 #include <cstdlib>
 
@@ -200,6 +200,10 @@ int IRCServer::_processMode(Message & message, Client & client)
 								+ ERR_NEEDMOREPARAMS + " " + client.getFQUN()
 								+ " MODE :Not enough parameters");
 					}
+				}
+				else if (*it == 'b') {
+					client.send(":" + this->_server_name + " " + RPL_ENDOFBANLIST + " " +
+							client.getFQUN() + " " + target + " :End of ban list");
 				}
 				else
 				{
