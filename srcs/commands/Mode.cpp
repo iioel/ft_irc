@@ -6,7 +6,7 @@
 /*   By: ycornamu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 16:09:40 by ycornamu          #+#    #+#             */
-/*   Updated: 2023/08/06 19:19:50 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/08/12 17:10:02 by ycornamu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int IRCServer::_processMode(Message & message, Client & client)
 	std::string					modes;
 	size_t						param_pos;
 	bool						sign;
+	bool						showModeDiff = false;
 
 	std::vector<std::string>	params = message.getParams();
 
@@ -96,12 +97,6 @@ int IRCServer::_processMode(Message & message, Client & client)
 			return (client.send(":" + this->_server_name + " " + RPL_CHANNELMODEIS + " "
 					+ client.getFQUN() + " " + target + " " + channel->getModes()));
 		}
-		else if (! channel->isChanop(&client))
-		{
-			return (client.send(":" + this->_server_name + " " + ERR_CHANOPRIVSNEEDED
-					+ " " + client.getFQUN() + " " + target
-					+ " :You're not channel operator"));
-		}
 		else
 		{
 			modes = params[1];
@@ -113,10 +108,28 @@ int IRCServer::_processMode(Message & message, Client & client)
 				else if (*it == '-')
 					sign = false;
 				else if (*it == 'i')
+				{
+					showModeDiff = true;
+					if (! channel->isChanop(&client))
+					{
+						 client.send(":" + this->_server_name + " " + ERR_CHANOPRIVSNEEDED
+								+ " " + client.getFQUN() + " " + target
+								+ " :You're not channel operator");
+						 continue;
+					}
 					channel->setInviteFlag(sign);
+				}
 				else if (*it == 'l')
 				{
-					if ( sign && param_pos < params.size())
+					showModeDiff = true;
+					if (! channel->isChanop(&client))
+					{
+						 client.send(":" + this->_server_name + " " + ERR_CHANOPRIVSNEEDED
+								+ " " + client.getFQUN() + " " + target
+								+ " :You're not channel operator");
+						 continue;
+					}
+					else if ( sign && param_pos < params.size())
 					{
 						if (params[param_pos].find_first_not_of("0123456789") == std::string::npos)
 						{
@@ -145,7 +158,15 @@ int IRCServer::_processMode(Message & message, Client & client)
 				}
 				else if (*it == 'k')
 				{
-					if (sign && param_pos < params.size())
+					showModeDiff = true;
+					if (! channel->isChanop(&client))
+					{
+						 client.send(":" + this->_server_name + " " + ERR_CHANOPRIVSNEEDED
+								+ " " + client.getFQUN() + " " + target
+								+ " :You're not channel operator");
+						 continue;
+					}
+					else if (sign && param_pos < params.size())
 					{
 						channel->setPasswordFlag(sign);
 						if (sign)
@@ -161,10 +182,28 @@ int IRCServer::_processMode(Message & message, Client & client)
 						channel->setPasswordFlag(sign);
 				}
 				else if (*it == 't')
+				{
+					showModeDiff = true;
+					if (! channel->isChanop(&client))
+					{
+						 client.send(":" + this->_server_name + " " + ERR_CHANOPRIVSNEEDED
+								+ " " + client.getFQUN() + " " + target
+								+ " :You're not channel operator");
+						 continue;
+					}
 					channel->setTopicFlag(sign);
+				}
 				else if (*it == 'o')
 				{
-					if (param_pos < params.size())
+					showModeDiff = true;
+					if (! channel->isChanop(&client))
+					{
+						 client.send(":" + this->_server_name + " " + ERR_CHANOPRIVSNEEDED
+								+ " " + client.getFQUN() + " " + target
+								+ " :You're not channel operator");
+						 continue;
+					}
+					else if (param_pos < params.size())
 					{
 						Client *client_op = client.checkNicknameExist(params[param_pos],
 								this->_clients);
@@ -212,11 +251,14 @@ int IRCServer::_processMode(Message & message, Client & client)
 							+ *it + " :is unknown mode char to me for " + target));
 				}
 			}
-			client.send(":" + client.getFQUN() + " MODE " + target + " "
-					+ getModesDiff(channel, &backup_chan));
-			if (getModesDiff(channel, &backup_chan) != "")
-				channel->sendToAllButOne(":" + client.getFQUN() + " MODE " + target + " "
-						+ getModesDiff(channel, &backup_chan), &client);
+			if (showModeDiff)
+			{
+				client.send(":" + client.getFQUN() + " MODE " + target + " "
+						+ getModesDiff(channel, &backup_chan));
+				if (getModesDiff(channel, &backup_chan) != "")
+					channel->sendToAllButOne(":" + client.getFQUN() + " MODE " + target + " "
+							+ getModesDiff(channel, &backup_chan), &client);
+			}
 		}
 	}
 	else
