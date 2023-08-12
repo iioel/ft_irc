@@ -6,7 +6,7 @@
 #    By: yoel <marvin@42.fr>                        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/15 16:36:11 by yoel              #+#    #+#              #
-#    Updated: 2023/08/06 15:26:03 by lduboulo         ###   ########.fr        #
+#    Updated: 2023/08/12 16:59:33 by ycornamu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,6 +95,7 @@ fclean: clean
 	@rm -rf $(NAME)
 	@printf "${RED}Deleted ${NAME} bin${RESET}\n"
 
-re: fclean all
+re: fclean .WAIT all
 
-.PHONY : all clean fclean re
+.PHONY: all clean fclean re
+
